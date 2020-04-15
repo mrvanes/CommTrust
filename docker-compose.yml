@@ -1,0 +1,58 @@
+---
+version: "2"
+
+services:
+
+  idp:
+    build:
+      context: ./idp
+    image: commtrust-idp:v1
+    extra_hosts:
+      - srv.commtrust.local:172.22.10.2
+      - idp.commtrust.local:172.22.10.3
+    hostname: idp
+    volumes:
+      - "./idp/config/metadata:/var/www/simplesamlphp/metadata"
+    expose:
+      - 80
+      - 443
+    networks:
+      commtrust:
+        ipv4_address: 172.22.10.3
+
+  srv:
+    build:
+      context: ./srv
+    image: commtrust-srv:v1
+    extra_hosts:
+      - srv.commtrust.local:172.22.10.2
+      - idp.commtrust.local:172.22.10.3
+    hostname: srv
+    volumes:
+      - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
+      - "./commtrust-demonstrator:/var/www"
+    tmpfs:
+      - /run
+      - /run/lock
+      - /tmp
+    security_opt:
+      - seccomp:unconfined
+    cap_add:
+      - SYS_ADMIN
+    expose:
+      - 80
+      - 443
+    #depends_on:
+      #- "idp"
+    networks:
+      commtrust:
+        ipv4_address: 172.22.10.2
+
+networks:
+  commtrust:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.22.10.0/24
+          gateway: 172.22.10.1
