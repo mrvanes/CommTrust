@@ -1,0 +1,26 @@
+<html>
+<body>
+<h1>Applicant</h1>
+<h3>Hello {{ name }}</h3>
+<p><a href='?action=logout'>logout</a></p>
+
+{% block proof %}
+{% endblock %}
+
+{% block open %}
+    <p><b>Open Attestations</b></p>
+    {% for attestation in open %}
+    <a href="/complete.php?aid={{ attestation['attestation_id'] }}">{{ attestation['name'] }}</a><br>
+    {% endfor %}
+{% endblock %}
+
+{% block completed %}
+    <p><b>Completed Attestations</b></p>
+    {% for attestation in completed %}
+    <a href="/complete.php?aid={{ attestation['attestation_id'] }}">{{ attestation['name'] }}</a>{% if attestation['ra'] %} approved by {{ attestation['ra'] }} on {{ attestation['approved_at'] }}{% endif %}<br>
+    {% endfor %}
+{% endblock %}
+
+{{ include('debug.twig') }}
+</body>
+</html>

@@ -1,0 +1,21 @@
+{% extends 'index.twig' %}
+
+{% block proof %}
+    <a href="/">home</a><br>
+    <p><b>Proof of {{ attestation['attestation_name'] }} for {{ attestation['for_user'] }}</b></p>
+    Acquired from {{ attestation['source'] }}<br>
+    {% if attestation['approved_by'] %}
+        Approved by {{ attestation['by_user'] }} at {{ attestation['approved_at'] }} for {{ attestation['for_user'] }}<br>
+        <a href="{{ url }}?pid={{ pid }}&action=disapprove">Disapprove</a> Attestation<br>
+    {% else %}
+        <a href="{{ url }}?pid={{ pid }}&action=approve">Approve</a> Attestation<br>
+    {% endif %}
+    <pre>{{ attestation['proof'] }}</pre>
+{% endblock %}
+
+{% block approved %}
+{% endblock %}
+
+{% block unapproved %}
+{% endblock %}
+

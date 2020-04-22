@@ -1,0 +1,28 @@
+<html>
+<body>
+<h1>RA</h1>
+<h3>Hello {{ name }}</h3>
+
+{% block proof %}
+{% endblock %}
+
+{% block approved %}
+    <p><b>Approved Attestations by {{ ra }}{% if user %} for {{ user['display_name'] }}{% endif %}</b></p>
+    {% for attestation in approved %}
+    <a href="/approve.php?pid={{ attestation['proof_id'] }}">{{ attestation['name'] }}</a> for
+    <a href="/user.php?id={{ attestation['user_id'] }}">{{ attestation['display_name'] }}</a><br>
+    {% endfor %}
+{% endblock %}
+
+{% block unapproved %}
+    <p><b>Unapproved Attestations{% if user %} for {{ user['display_name'] }}{% endif %}</b></p>
+    {% for attestation in unapproved %}
+    <a href="/approve.php?pid={{ attestation['proof_id'] }}">{{ attestation['name'] }}</a> for
+    <a href="/user.php?id={{ attestation['user_id'] }}">{{ attestation['display_name'] }}</a><br>
+    {% endfor %}
+{% endblock %}
+
+
+{{ include('debug.twig') }}
+</body>
+</html>

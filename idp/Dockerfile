@@ -1,19 +1,28 @@
-FROM ubuntu:16.04
+FROM debian:buster AS commtrust-srv
+MAINTAINER SURFnet <info@surfnet.nl>
 
+ARG DEBIAN_FRONTEND=noninteractive
+ARG RUNLEVEL=1
+ENV TERM linux
+
+RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections  && \
+    echo "deb http://ftp.de.debian.org/debian/ buster-backports main" >> /etc/apt/sources.list  && \
+    apt update -y  && \
+    apt install -y openssh-server sudo locales git vim net-tools bash-completion && \
+    apt clean -y && apt-get autoremove -y && \
+    update-locale  && \
+    systemctl enable ssh.service  && \
+    systemctl disable systemd-timesyncd.service  && \
+    echo "exit 0" > /usr/sbin/policy-rc.d
+
+RUN apt install -y apache2 libapache2-mod-php \
+    php-xml php-curl
+
+# sshd services in all containers
+EXPOSE 22
+EXPOSE 80
 EXPOSE 443
 
-RUN apt -y update && apt -y full-upgrade && apt -y autoremove && apt install -y --no-install-recommends sudo dnsutils git software-properties-common
-RUN apt-add-repository -y ppa:ansible/ansible && apt -y update && apt install -y ansible
-RUN apt -y clean
+STOPSIGNAL SIGRTMIN+3
 
-RUN git clone https://github.com/OpenConext/OpenConext-DIY.git /tmp/ansible/simplesaml-idp
-COPY config/ansible/inventory /tmp/ansible/simplesaml-idp/
-COPY config/ansible/idp.yml /tmp/ansible/simplesaml-idp/group_vars/
-
-RUN  ansible-playbook -i /tmp/ansible/simplesaml-idp/inventory /tmp/ansible/simplesaml-idp/openconext-diy.yml
-
-COPY config/metadata /var/www/simplesamlphp/metadata
-
-RUN apt-get update && apt-get install -y vim
-
-ENTRYPOINT /bin/rm -f /var/run/apache2/apache2.pid; /usr/sbin/apache2ctl -DFOREGROUND
+CMD ["/lib/systemd/systemd"]
