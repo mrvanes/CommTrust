@@ -1,16 +1,19 @@
 {% extends 'index.twig' %}
 
 {% block proof %}
-    <a href="/">home</a><br>
-    <p><b>Proof of {{ attestation['attestation_name'] }} for {{ attestation['for_user'] }}</b></p>
+    <h3>Proof of {{ attestation['attestation_name'] }} for {{ attestation['for_user'] }}</h3>
     Acquired from {{ attestation['source'] }}<br>
     {% if attestation['approved_by'] %}
         Approved by {{ attestation['by_user'] }} at {{ attestation['approved_at'] }} for {{ attestation['for_user'] }}<br>
-        <a href="{{ url }}?pid={{ pid }}&action=disapprove">Disapprove</a> Attestation<br>
+        <p><input type=submit name=action value=disapprove> attestation</p>
     {% else %}
-        <a href="{{ url }}?pid={{ pid }}&action=approve">Approve</a> Attestation<br>
+        <p><input type=submit name=action value=approve> attestation</p>
     {% endif %}
-    <pre>{{ attestation['proof'] }}</pre>
+    <table>
+    {% for k, vs in attestation['proof'] %}
+    <tr valign=top><td><b>{{ k }}</b></td><td>{% for v in vs %}{% if not v is iterable %}{{ v }}{% endif %}<br>{% endfor %}</td></tr>
+    {% endfor %}
+    </table>
 {% endblock %}
 
 {% block approved %}

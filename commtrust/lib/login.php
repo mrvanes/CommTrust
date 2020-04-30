@@ -1,5 +1,5 @@
 <?php
-$action = isset($_GET['action'])?$_GET['action']:'';
+$action = isset($_POST['action'])?$_POST['action']:'';
 $asp = new \SimpleSAML\Auth\Simple('default-sp');
 
 if ($action=='logout') {

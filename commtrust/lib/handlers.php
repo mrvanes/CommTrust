@@ -17,6 +17,11 @@ class empty_handler {
 
     }
 
+    function get_card($proof) {
+        $r = ["a" => "b", "c" => "d"];
+        return $r;
+    }
+
     function is_completed() {
 
         return true;
@@ -34,12 +39,14 @@ class saml_handler {
     private $attributes = "";
     private $source = "";
     private $completed = false;
+    private $card = [];
 
     function __construct($config) {
-        $c = json_decode($config);
-        $this->sp = $c->sp;
-        $this->idp = $c->idp;
-        $this->session = new \SimpleSAML\Auth\Simple($c->sp);
+        $c = json_decode($config, true);
+        $this->sp = $c['sp'];
+        $this->idp = $c['idp'];
+        $this->card = $c['card'];
+        $this->session = new \SimpleSAML\Auth\Simple($c['sp']);
     }
 
     function get_id() {
@@ -49,6 +56,15 @@ class saml_handler {
     function get_attributes() {
         return $this->attributes;
 
+    }
+
+    function get_card($proof, $config) {
+        $c = json_decode($config, true);
+        $p = json_decode($proof, true);
+        foreach($c['card'] as $a) {
+            if (isset($p[$a])) $r[$a] = implode("; ", $p[$a]);
+        }
+        return $r;
     }
 
     function get_source() {
@@ -78,6 +94,72 @@ class saml_handler {
 
 }
 
+class oidc_handler {
+    private $id = "OIDC";
+    private $config = "";
+    private $rp = "";
+    private $op = "";
+    private $session = "";
+    private $attributes = "";
+    private $source = "";
+    private $completed = false;
+    private $card = [];
+
+    function __construct($config) {
+        $c = json_decode($config, true);
+        $this->rp = $c['rp'];
+        $this->op = $c['op'];
+        $this->card = $c['card'];
+        $this->session = new \SimpleSAML\Auth\Simple($c['rp']);
+    }
+
+    function get_id() {
+        return $this->id;
+    }
+
+    function get_attributes() {
+        return $this->attributes;
+
+    }
+
+    function get_card($proof, $config) {
+        $c = json_decode($config, true);
+        $p = json_decode($proof, true);
+        foreach($c['card'] as $a) {
+            if (isset($p[$a])) $r[$a] = implode("; ", $p[$a]);
+        }
+        return $r;
+    }
+
+    function get_source() {
+        return $this->source;
+
+    }
+
+    function start() {
+        echo "OP: " . print_r($this->op, true);
+        $this->session->requireAuth([
+            'openidconnect:op' => $this->op
+        ]);
+        \SimpleSAML\Session::getSessionFromRequest()->cleanup();
+        $this->attributes = $this->session->getAttributes();
+        $this->source = $this->op['client_id'];
+        $this->completed = true;
+    }
+
+    function clear($return_url) {
+        if (!$return_url) $return_url = $_SERVER['PHP_SELF'];
+        $this->session->logout(['ReturnTo' => $return_url]);
+        \SimpleSAML\Session::getSessionFromRequest()->cleanup();
+    }
+
+    function is_completed() {
+        return $this->completed;
+    }
+
+}
+
+
 class readid_handler {
     private $id = "ReadID";
     private $config = "";
@@ -89,7 +171,7 @@ class readid_handler {
     private $completed = false;
 
     function __construct($config) {
-        $c = json_decode($config);
+        $c = json_decode($config, true);
 //         $this->sp = $c->sp;
 //         $this->idp = $c->idp;
 //         $this->session = new \SimpleSAML\Auth\Simple($c->sp);
@@ -104,6 +186,14 @@ class readid_handler {
 
     }
 
+    function get_card($proof) {
+        $p = json_decode($proof, true);
+        if (isset($p['deviceInfo']['brand'])) $r['brand'] = $p['deviceInfo']['brand'];
+        if (isset($p['deviceInfo']['model'])) $r['model'] = $p['deviceInfo']['model'];
+        if (isset($p['documentContent']['nameOfHolder'])) $r['holder'] = $p['documentContent']['nameOfHolder'];
+        return $r;
+    }
+
     function get_source() {
         return $this->source;
 
@@ -113,7 +203,7 @@ class readid_handler {
 //         $this->session->requireAuth([
 //             'saml:idp' => $this->idp,
 //         ]);
-        $this->attributes = json_decode($this->readid_reply);
+        $this->attributes = json_decode($this->readid_reply, true);
         $this->source = "readid";
         $this->completed = true;
     }

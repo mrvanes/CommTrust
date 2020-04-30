@@ -17,8 +17,11 @@ $completed_attestations = find_completed_attestations($user_id);
 
 $vars['open'] = $open_attestations;
 $vars['completed'] = $completed_attestations;
+$vars['url'] =  $_SERVER['PHP_SELF'];
 
 // Debug
 $vars['delays'] = print_r($Q_DELAY, true);
+$vars['post'] = print_r($_POST, true);
+$vars['get'] = print_r($_GET, true);
 echo $twig->render('index.twig', $vars);
 

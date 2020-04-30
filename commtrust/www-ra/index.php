@@ -11,6 +11,7 @@ $loader = new \Twig\Loader\FilesystemLoader('../templates-ra');
 $twig = new \Twig\Environment($loader);
 
 $vars['name'] = $cn;
+$vars['url'] = $_SERVER['PHP_SELF'];
 
 if (!$user) {
     echo $twig->render('error.twig', $vars);
@@ -24,7 +25,8 @@ $vars['approved'] = $approved_attestations;
 $vars['unapproved'] = $unapproved_attestations;
 $vars['ra'] = $cn;
 
-// Debug info
+// Debug
 $vars['delays'] = print_r($Q_DELAY, true);
-
+$vars['post'] = print_r($_POST, true);
+$vars['get'] = print_r($_GET, true);
 echo $twig->render('index.twig', $vars);

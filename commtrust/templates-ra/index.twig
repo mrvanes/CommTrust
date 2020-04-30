@@ -1,28 +1,55 @@
-<html>
-<body>
-<h1>RA</h1>
-<h3>Hello {{ name }}</h3>
+{{ include('header.twig') }}
+
+{% if pid %}
+    <input type=hidden name=pid value={{ pid }}>
+{% endif %}
 
 {% block proof %}
+<div class="container">
+<h2>RA vetting</h2>
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+</div>
 {% endblock %}
 
 {% block approved %}
-    <p><b>Approved Attestations by {{ ra }}{% if user %} for {{ user['display_name'] }}{% endif %}</b></p>
+    <div class="container">
+    <h3>Approved Attestations by {{ ra }}{% if user %} for {{ user['display_name'] }}{% endif %}</h3>
     {% for attestation in approved %}
-    <a href="/approve.php?pid={{ attestation['proof_id'] }}">{{ attestation['name'] }}</a> for
-    <a href="/user.php?id={{ attestation['user_id'] }}">{{ attestation['display_name'] }}</a><br>
+    <div class="idcard">
+    <a href="/approve.php?pid={{ attestation['proof_id'] }}">{{ attestation['name'] }}</a><br>
+    for <a href="/user.php?id={{ attestation['user_id'] }}">{{ attestation['display_name'] }}</a><br>
+    <div class="proof">
+    proved on {{ attestation['proved_at'] }}<br>
+    approved on {{ attestation['approved_at'] }}<br>
+    {% for k,v in attestation['card'] %}
+    {{ k }}: {{ v }}<br>
     {% endfor %}
+    </div>
+    </div>
+    {% endfor %}
+    </div<
 {% endblock %}
 
 {% block unapproved %}
-    <p><b>Unapproved Attestations{% if user %} for {{ user['display_name'] }}{% endif %}</b></p>
+    <div class="container">
+    <h3>Unapproved Attestations{% if user %} for {{ user['display_name'] }}{% endif %}</h3>
     {% for attestation in unapproved %}
-    <a href="/approve.php?pid={{ attestation['proof_id'] }}">{{ attestation['name'] }}</a> for
-    <a href="/user.php?id={{ attestation['user_id'] }}">{{ attestation['display_name'] }}</a><br>
+    <div class="idcard">
+    <a href="/approve.php?pid={{ attestation['proof_id'] }}">{{ attestation['name'] }}</a><br>
+    for <a href="/user.php?id={{ attestation['user_id'] }}">{{ attestation['display_name'] }}</a><br>
+    <div class="proof">
+    proved on: {{ attestation['proved_at'] }}<br>
+    {% for k,v in attestation['card'] %}
+    {{ k }}: {{ v }}<br>
     {% endfor %}
+    </div>
+    </div>
+    {% endfor %}
+    <div>
 {% endblock %}
+{{ include('footer.twig') }}
 
 
-{{ include('debug.twig') }}
-</body>
-</html>

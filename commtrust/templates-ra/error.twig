@@ -1,10 +1,11 @@
-<html>
-<body>
-<h1>RA</h1>
-<h3>Hello {{ name }}</h3>
-<p>You are not allowed to login to this site</p>
+{% extends 'index.twig' %}
 
-<p><a href='?action=logout'>logout</a></p>
-{{ include('debug.twig') }}
-</body>
-</html>
+{% block proof %}
+<p>You are not allowed to login to this site</p>
+{% endblock %}
+
+{% block approved %}
+{% endblock %}
+
+{% block unapproved %}
+{% endblock %}

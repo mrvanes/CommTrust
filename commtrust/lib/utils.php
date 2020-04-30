@@ -13,3 +13,17 @@ function db_register($uid, $cn, $ra) {
 
     return $user[0];
 }
+
+function restore($var, $default='') {
+    if (isset($_GET[$var])) {
+        $r = $_GET[$var];
+    } else if (isset($_POST[$var])) {
+        $r = $_POST[$var];
+    } else if (isset($_SESSION[$var])) {
+        $r = $_SESSION[$var];
+    } else {
+        $r = $default;
+    }
+    $_SESSION[$var] = $r;
+    return $r;
+}
