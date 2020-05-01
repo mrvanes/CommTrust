@@ -27,3 +27,9 @@ function restore($var, $default='') {
     $_SESSION[$var] = $r;
     return $r;
 }
+
+function remove($var) {
+    unset($_GET[$var]);
+    unset($_POST[$var]);
+    unset($_SESSION[$var]);
+}

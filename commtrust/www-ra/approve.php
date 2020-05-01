@@ -16,11 +16,13 @@ $vars['name'] = $cn;
 
 if (!$user) {
     echo $twig->render('error.twig', $vars);
-    exit();
+    exit;
 }
 
 if ($action == 'approve') {
-    approve_attestation($pid, $user_id);
+    $with = isset($_POST['with'])?$_POST['with']:[];
+    $with = json_encode($with);
+    approve_attestation($pid, $user_id, $with);
 }
 
 if ($action == 'disapprove') {
@@ -35,4 +37,5 @@ $vars['pid'] = $pid;
 $vars['delays'] = print_r($Q_DELAY, true);
 $vars['post'] = print_r($_POST, true);
 $vars['get'] = print_r($_GET, true);
+$vars['session'] = print_r($_SESSION, true);
 echo $twig->render('approve.twig', $vars);

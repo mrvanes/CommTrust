@@ -5,7 +5,11 @@
 {% if proof %}
     <p>Found proof:<br>
     Acquired from {{ source }}<br>
-    On: {{ date }}
+    On: {{ date }}<br>
+    {% if attestation['approved_by'] %}
+        Approved by {{ attestation['by_user'] }} at {{ attestation['approved_at'] }}<br>
+        {% if attestation['approved_with']['in_person'] %} with in_person<br>{% endif %}
+    {% endif %}
     <p><input type=submit name=action value=retract> proof</p>
     <table>
     {% for k, vs in proof %}

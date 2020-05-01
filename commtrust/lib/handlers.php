@@ -3,9 +3,12 @@
 class empty_handler {
     private $id = "EMPTY";
     private $config = [];
+    private $attributes = [];
+    private $completed = false;
+    private $source = "";
 
     function __construct($config) {
-        $this->config = json_decode($config);
+        $this->config = json_decode($config, true);
     }
 
     function get_id() {
@@ -17,14 +20,30 @@ class empty_handler {
 
     }
 
-    function get_card($proof) {
-        $r = ["a" => "b", "c" => "d"];
+    function get_card($proof, $config) {
+        $r = $this->attributes;
         return $r;
+    }
+
+    function get_source() {
+        return $this->source;
+
+    }
+
+    function start() {
+        $this->attributes = ["a" => "b" ];
+        $this->source = $this->id;
+        $this->completed = true;
+    }
+
+    function clear($return_url) {
+        $this->attributes = [];
+        $this->completed = false;
     }
 
     function is_completed() {
 
-        return true;
+        return $this->completed;
 
     }
 
@@ -32,11 +51,11 @@ class empty_handler {
 
 class saml_handler {
     private $id = "SAML";
-    private $config = "";
+    private $config = [];
+    private $attributes = [];
     private $sp = "";
     private $idp = "";
     private $session = "";
-    private $attributes = "";
     private $source = "";
     private $completed = false;
     private $card = [];
@@ -96,11 +115,11 @@ class saml_handler {
 
 class oidc_handler {
     private $id = "OIDC";
-    private $config = "";
+    private $config = [];
+    private $attributes = [];
     private $rp = "";
     private $op = "";
     private $session = "";
-    private $attributes = "";
     private $source = "";
     private $completed = false;
     private $card = [];
@@ -159,6 +178,72 @@ class oidc_handler {
 
 }
 
+class self_handler {
+    private $id = "SELF";
+    private $config = [];
+    private $attributes = [];
+    private $completed = false;
+    private $source = "";
+    private $card = [];
+    private $inputs = [];
+
+    function __construct($config) {
+        $c = json_decode($config, true);
+        $this->inputs = $c['inputs'];
+        $this->card = $c['card'];
+    }
+
+    function get_id() {
+        return $this->id;
+    }
+
+    function get_attributes() {
+        return $this->attributes;
+
+    }
+
+    function get_card($proof, $config) {
+        $c = json_decode($config, true);
+        $p = json_decode($proof, true);
+        foreach($c['card'] as $a) {
+            if (isset($p[$a])) $r[$a] = implode("; ", $p[$a]);
+        }
+        return $r;
+    }
+
+    function get_source() {
+        return $this->source;
+
+    }
+
+    function start() {
+        $self_attributes = restore('self:attributes', []);
+        if (!$self_attributes) {
+            $inputs = restore('self:inputs', $this->inputs);
+            header('Location: /self.php');
+            exit;
+        }
+        $this->attributes = restore('self:attributes', []);
+        remove('self:attributes');
+        remove('self:inputs');
+        $this->source = $this->id;
+        $this->completed = true;
+    }
+
+    function clear($return_url) {
+        $this->attributes = [];
+        $this->completed = false;
+        remove('self:attributes');
+        remove('self:inputs');
+        header('Location: ' . $return_url);
+        exit;
+    }
+
+    function is_completed() {
+        return $this->completed;
+
+    }
+}
 
 class readid_handler {
     private $id = "ReadID";

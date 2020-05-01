@@ -75,7 +75,7 @@ function get_user($user_id) {
 }
 
 function get_attestation_for_user($attestation_id, $user_id) {
-    $query  = "SELECT att.name, handler, config, prfs.proof, prfs.proof_id, prfs.source, prfs.proved_at FROM attestations att ";
+    $query  = "SELECT att.name, handler, config, prfs.proof, prfs.proof_id, prfs.source, prfs.proved_at, prfs.approved_by, prfs.approved_at, prfs.approved_with FROM attestations att ";
     $query .= "LEFT JOIN attestation_types attt ON att.type_id=attt.type_id ";
     $query .= "LEFT JOIN proofs prfs ON att.attestation_id=prfs.attestation_id AND prfs.user_id=$user_id ";
     $query .= "WHERE att.attestation_id = $attestation_id";
@@ -87,6 +87,9 @@ function get_attestation_for_user($attestation_id, $user_id) {
         $r['proof'] = $result[0]['proof'];
         $r['source'] = $result[0]['source'];
         $r['date'] = $result[0]['proved_at'];
+        $r['approved_by'] = $result[0]['approved_by'];
+        $r['approved_at'] = $result[0]['approved_at'];
+        $r['approved_with'] = json_decode($result[0]['approved_with'], true);
     } else {
         $r['name'] = 'Empty';
         $r['handler'] = 'empty_handler';
@@ -98,7 +101,7 @@ function get_attestation_for_user($attestation_id, $user_id) {
 }
 
 function get_attestation_for_proof($proof_id) {
-    $query  = "SELECT prfs.user_id, prfs.proof, prfs.approved_by, prfs.approved_at, prfs.source, ";
+    $query  = "SELECT prfs.user_id, prfs.proof, prfs.approved_by, prfs.approved_at, prfs.approved_with, prfs.source, ";
     $query .= "att.name, for_user.display_name AS for_user_name, by_user.display_name AS by_user_name FROM proofs prfs ";
     $query .= "LEFT JOIN attestations att ON prfs.attestation_id=att.attestation_id ";
     $query .= "LEFT JOIN users for_user ON prfs.user_id=for_user.user_id ";
@@ -111,6 +114,7 @@ function get_attestation_for_proof($proof_id) {
         $r['source'] = $result[0]['source'];
         $r['approved_by'] = $result[0]['approved_by'];
         $r['approved_at'] = $result[0]['approved_at'];
+        $r['approved_with'] = json_decode($result[0]['approved_with'], true);
         $r['attestation_name'] = $result[0]['name'];
         $r['by_user'] = $result[0]['by_user_name'];
         $r['for_user'] = $result[0]['for_user_name'];
@@ -134,9 +138,9 @@ function retract_proof($user_id, $attestation_id) {
     db_exec($query);
 }
 
-function approve_attestation($proof_id, $user_id) {
+function approve_attestation($proof_id, $user_id, $with) {
     $query  = "UPDATE proofs SET ";
-    $query .= "approved_by=$user_id, approved_at=now() ";
+    $query .= "approved_by=$user_id, approved_at=now(), approved_with='$with' ";
     $query .= "WHERE proof_id=$proof_id";
     db_exec($query);
 }

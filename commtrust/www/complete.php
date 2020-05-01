@@ -22,7 +22,19 @@ $attestion = new $r['handler']($r['config']);
 if ($action=='retract') {
     retract_proof($user_id, $aid);
     $proof = Null;
-    $attestion->clear($_SERVER['PHP_SELF'] . "?aid=$aid");
+//     $attestion->clear($_SERVER['PHP_SELF'] . "?aid=$aid");
+    $attestion->clear($_SERVER['PHP_SELF']);
+}
+
+if (!$proof) {
+    if ($action == 'start') {
+        $attestion->start();
+        $proof = json_encode($attestion->get_attributes());
+        $source = json_encode($attestion->get_source());
+        complete_attestation($user_id, $aid, $proof, $source);
+//         $attestion->clear($_SERVER['PHP_SELF'] . "?aid=$aid");
+        $attestion->clear($_SERVER['PHP_SELF']);
+    }
 }
 
 $vars = [
@@ -32,26 +44,17 @@ $vars = [
     'id' => $attestion->get_id()
 ];
 
-if (!$proof) {
-    if ($action == 'start') {
-        $attestion->start();
-        $proof = json_encode($attestion->get_attributes());
-        $source = json_encode($attestion->get_source());
-        complete_attestation($user_id, $aid, $proof, $source);
-        $attestion->clear($_SERVER['PHP_SELF'] . "?aid=$aid");
-
-    }
-}
 $vars['proof'] =  json_decode($proof, true);
 $vars['source'] = $source;
 $vars['date'] = $date;
 $vars['url'] = $_SERVER['PHP_SELF'];
 $vars['aid'] = $aid;
 $vars['action'] = $action;
-
+$vars['attestation'] = $r;
 
 // Debug
 $vars['delays'] = print_r($Q_DELAY, true);
 $vars['post'] = print_r($_POST, true);
 $vars['get'] = print_r($_GET, true);
+$vars['session'] = print_r($_SESSION, true);
 echo $twig->render('complete.twig', $vars);

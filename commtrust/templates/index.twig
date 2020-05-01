@@ -32,7 +32,7 @@ Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deseru
     <div class="idcard">
     <a href="/complete.php?aid={{ attestation['attestation_id'] }}">{{ attestation['name'] }}</a><br>
     <div class="proof">
-    proved on: {{ attestation['proved_at'] }}
+    proved on {{ attestation['proved_at'] }}
     {% if attestation['ra'] %}<br>
     approved by {{ attestation['ra'] }}<br>
     on {{ attestation['approved_at'] }}

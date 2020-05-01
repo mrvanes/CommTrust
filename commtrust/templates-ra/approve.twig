@@ -5,8 +5,10 @@
     Acquired from {{ attestation['source'] }}<br>
     {% if attestation['approved_by'] %}
         Approved by {{ attestation['by_user'] }} at {{ attestation['approved_at'] }} for {{ attestation['for_user'] }}<br>
+        {% if attestation['approved_with']['in_person'] %} with in_person {% endif %}<br>
         <p><input type=submit name=action value=disapprove> attestation</p>
     {% else %}
+        <p><input type=checkbox name=with[in_person] value=1> in person</p>
         <p><input type=submit name=action value=approve> attestation</p>
     {% endif %}
     <table>

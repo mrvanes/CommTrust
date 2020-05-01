@@ -7,6 +7,8 @@ require_once('../lib/utils.php');
 require_once('../lib/queries.php');
 require_once('../lib/login.php');
 
+remove('pid');
+
 $loader = new \Twig\Loader\FilesystemLoader('../templates-ra');
 $twig = new \Twig\Environment($loader);
 
@@ -29,4 +31,5 @@ $vars['ra'] = $cn;
 $vars['delays'] = print_r($Q_DELAY, true);
 $vars['post'] = print_r($_POST, true);
 $vars['get'] = print_r($_GET, true);
+$vars['session'] = print_r($_SESSION, true);
 echo $twig->render('index.twig', $vars);

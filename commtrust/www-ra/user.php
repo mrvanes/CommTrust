@@ -16,7 +16,7 @@ $vars['name'] = $cn;
 
 if (!$user) {
     echo $twig->render('error.twig', $vars);
-    exit();
+    exit;
 }
 
 $unapproved_attestations = find_unapproved_attestations($id);
@@ -32,4 +32,5 @@ $vars['url'] =  $_SERVER['PHP_SELF'];
 $vars['delays'] = print_r($Q_DELAY, true);
 $vars['post'] = print_r($_POST, true);
 $vars['get'] = print_r($_GET, true);
+$vars['session'] = print_r($_SESSION, true);
 echo $twig->render('user.twig', $vars);

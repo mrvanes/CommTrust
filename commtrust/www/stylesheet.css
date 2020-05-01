@@ -1,0 +1,39 @@
+body {
+    font-family: verdana;
+}
+
+h1, h2, h3, h4 {
+    margin-top: 0px;
+    margin-bottom: 4px;
+}
+
+div {
+    display: inline-block;
+    border: 1px dotted lightgrey;
+    margin: 0px 0px 8px 0px;
+}
+
+div.container {
+    width: 100%;
+}
+
+div.idcard {
+    width: 300px;
+    border: 2px solid black;
+    border-radius: 8px;
+    padding: 4px;
+    background: #D0FFD0;
+    height: 100px;
+    overflow: hidden;
+    font-size: smaller;
+}
+
+div.proof {
+    font-size: smaller;
+}
+
+a {
+    text-decoration: none;
+    font-weight: bold;
+    color: grey;
+}
