@@ -1,18 +1,24 @@
 {% extends 'index.twig' %}
 
-{% block proof %}
-<h3>Attestation {{ type }} via {{ id }}</h3>
-{% if proof %}
-    <p>Found proof:<br>
+{% block evidence %}
+<h3>Claim {{ type }} via {{ id }}</h3>
+Unlocks the following Attestations:<br><br>
+{% for attestation in attestations %}
+    <div class="attestation">
+    {{ attestation['name'] }}
+    </div>
+{% endfor %}
+{% if evidence %}
+    <p>Found evidence:<br>
     Acquired from {{ source }}<br>
-    On: {{ date }}<br>
-    {% if attestation['approved_by'] %}
-        Approved by {{ attestation['by_user'] }} at {{ attestation['approved_at'] }}<br>
-        {% if attestation['approved_with']['in_person'] %} with in_person<br>{% endif %}
+    On: {{ proved_at }}<br>
+    {% if claim['approved_by'] %}
+        Approved by {{ claim['uid'] }} at {{ claim['approved_at'] }}<br>
+        {% if claim['approved_with']['in_person'] %} with in_person<br>{% endif %}
     {% endif %}
-    <p><input type=submit name=action value=retract> proof</p>
+    <p><input type=submit name=action value=retract> evidence</p>
     <table>
-    {% for k, vs in proof %}
+    {% for k, vs in evidence %}
     <tr valign=top><td><b>{{ k }}</b></td><td>{% for v in vs %}{% if not v is iterable %}{{ v }}{% endif %}<br>{% endfor %}</td></tr>
     {% endfor %}
     </table>
@@ -20,7 +26,7 @@
     {% if start %}
         <p>Attestation completed</p>
     {% else %}
-        <p><input type=submit name=action value=start> attestation</p>
+        <p><input type=submit name=action value=start> claim</p>
     {% endif %}
 {% endif %}
 {% endblock %}
@@ -29,4 +35,10 @@
 {% endblock %}
 
 {% block completed %}
+{% endblock %}
+
+{% block approved %}
+{% endblock %}
+
+{% block attestations %}
 {% endblock %}

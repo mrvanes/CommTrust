@@ -10,7 +10,7 @@ require_once('../lib/login.php');
 $loader = new \Twig\Loader\FilesystemLoader('../templates-ra');
 $twig = new \Twig\Environment($loader);
 
-$pid = restore('pid', 0);
+$aid = restore('aid', 0);
 
 $vars['name'] = $cn;
 
@@ -22,16 +22,18 @@ if (!$user) {
 if ($action == 'approve') {
     $with = isset($_POST['with'])?$_POST['with']:[];
     $with = json_encode($with);
-    approve_attestation($pid, $user_id, $with);
+    approve_assertion($aid, $user_id, $with);
 }
 
 if ($action == 'disapprove') {
-    disapprove_attestation($pid, $user_id);
+    disapprove_assertion($aid, $user_id);
 }
 
-$vars['attestation'] = get_attestation_for_proof($pid);
+$claim = get_claim_for_assertion($aid);
+$vars['claim'] = $claim;
+$vars['attestations'] = get_attestations_for_claim($claim['claim_id']);
 $vars['url'] =  $_SERVER['PHP_SELF'];
-$vars['pid'] = $pid;
+$vars['aid'] = $aid;
 
 // Debug
 $vars['delays'] = print_r($Q_DELAY, true);

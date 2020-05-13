@@ -15,6 +15,18 @@ div {
 
 div.container {
     width: 100%;
+    position: relative;
+}
+
+div.attestation {
+    width: 300px;
+    border: 2px solid black;
+    border-radius: 8px;
+    padding: 4px;
+    background: #D0FFD0;
+    height: 50px;
+    overflow: hidden;
+    font-size: smaller;
 }
 
 div.idcard {
@@ -28,7 +40,19 @@ div.idcard {
     font-size: smaller;
 }
 
-div.proof {
+div.open {
+    background: #FFD0D0;
+}
+
+div.completed {
+    background: #FFFFD0;
+}
+
+div.approved {
+    background: #D0FFD0;
+}
+
+div.evidence {
     font-size: smaller;
 }
 

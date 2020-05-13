@@ -19,11 +19,11 @@ if (!$user) {
     exit;
 }
 
-$unapproved_attestations = find_unapproved_attestations($id);
-$approved_attestations = find_approved_attestations($user_id, $id);
+$unapproved_assertions = find_unapproved_assertions($id);
+$approved_assertions = find_approved_assertions($user_id, $id);
 
-$vars['unapproved'] = $unapproved_attestations;
-$vars['approved'] = $approved_attestations;
+$vars['unapproved'] = $unapproved_assertions;
+$vars['approved'] = $approved_assertions;
 $vars['ra'] = $cn;
 $vars['user'] = get_user($id);
 $vars['url'] =  $_SERVER['PHP_SELF'];

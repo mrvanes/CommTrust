@@ -11,29 +11,27 @@ require_once('../lib/login.php');
 $loader = new \Twig\Loader\FilesystemLoader('../templates');
 $twig = new \Twig\Environment($loader);
 
-$aid = restore('aid', 0);
+$cid = restore('cid', 0);
 
-$r = get_attestation_for_user($aid, $user_id);
-$proof = $r['proof'];
+$r = get_claim_for_user($cid, $user_id);
+$evidence = $r['evidence'];
 $source = $r['source'];
-$date = $r['date'];
-$attestion = new $r['handler']($r['config']);
+$proved_at = $r['proved_at'];
+$claim = new $r['handler']($r['config']);
 
 if ($action=='retract') {
-    retract_proof($user_id, $aid);
-    $proof = Null;
-//     $attestion->clear($_SERVER['PHP_SELF'] . "?aid=$aid");
-    $attestion->clear($_SERVER['PHP_SELF']);
+    retract_evidence($user_id, $cid);
+    $evidence = Null;
+    $claim->clear($_SERVER['PHP_SELF']);
 }
 
-if (!$proof) {
+if (!$evidence) {
     if ($action == 'start') {
-        $attestion->start();
-        $proof = json_encode($attestion->get_attributes());
-        $source = json_encode($attestion->get_source());
-        complete_attestation($user_id, $aid, $proof, $source);
-//         $attestion->clear($_SERVER['PHP_SELF'] . "?aid=$aid");
-        $attestion->clear($_SERVER['PHP_SELF']);
+        $claim->start();
+        $evidence = json_encode($claim->get_attributes());
+        $source = json_encode($claim->get_source());
+        complete_evidence($user_id, $cid, $evidence, $source);
+        $claim->clear($_SERVER['PHP_SELF']);
     }
 }
 
@@ -41,16 +39,17 @@ $vars = [
     'name' => $uid,
     'user_id' => $user_id,
     'type' => $r['name'],
-    'id' => $attestion->get_id()
+    'id' => $claim->get_id()
 ];
 
-$vars['proof'] =  json_decode($proof, true);
+$vars['evidence'] =  json_decode($evidence, true);
 $vars['source'] = $source;
-$vars['date'] = $date;
+$vars['proved_at'] = $proved_at;
 $vars['url'] = $_SERVER['PHP_SELF'];
-$vars['aid'] = $aid;
+$vars['cid'] = $cid;
 $vars['action'] = $action;
-$vars['attestation'] = $r;
+$vars['claim'] = $r;
+$vars['attestations'] = get_attestations_for_claim($cid);
 
 // Debug
 $vars['delays'] = print_r($Q_DELAY, true);

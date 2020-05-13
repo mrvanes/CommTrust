@@ -9,6 +9,7 @@ services:
     image: commtrust-idp:v1
     extra_hosts:
       - srv.commtrust.local:172.22.10.2
+      - op.commtrust.local:172.22.10.3
       - idp.commtrust.local:172.22.10.3
       - idp1.commtrust.local:172.22.10.3
       - idp2.commtrust.local:172.22.10.3
@@ -38,6 +39,7 @@ services:
     image: commtrust-srv:v1
     extra_hosts:
       - srv.commtrust.local:172.22.10.2
+      - op.commtrust.local:172.22.10.3
       - idp.commtrust.local:172.22.10.3
       - idp1.commtrust.local:172.22.10.3
       - idp2.commtrust.local:172.22.10.3

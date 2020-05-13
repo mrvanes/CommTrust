@@ -7,7 +7,7 @@ require_once('../lib/utils.php');
 require_once('../lib/queries.php');
 require_once('../lib/login.php');
 
-remove('pid');
+remove('aid');
 
 $loader = new \Twig\Loader\FilesystemLoader('../templates-ra');
 $twig = new \Twig\Environment($loader);
@@ -20,11 +20,11 @@ if (!$user) {
     exit();
 }
 
-$approved_attestations = find_approved_attestations($user_id, 0);
-$unapproved_attestations = find_unapproved_attestations(0);
+$approved_assertions = find_approved_assertions($user_id, 0);
+$unapproved_assertions = find_unapproved_assertions(0);
 
-$vars['approved'] = $approved_attestations;
-$vars['unapproved'] = $unapproved_attestations;
+$vars['approved'] = $approved_assertions;
+$vars['unapproved'] = $unapproved_assertions;
 $vars['ra'] = $cn;
 
 // Debug
