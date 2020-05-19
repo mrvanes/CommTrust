@@ -219,13 +219,14 @@ class self_handler {
     function start() {
         $self_attributes = restore('self:attributes', []);
         if (!$self_attributes) {
+            remove('self:inputs');
             $inputs = restore('self:inputs', $this->inputs);
             header('Location: /self.php');
             exit;
         }
         $this->attributes = restore('self:attributes', []);
-        remove('self:attributes');
-        remove('self:inputs');
+//         remove('self:attributes');
+//         remove('self:inputs');
         $this->source = $this->id;
         $this->completed = true;
     }

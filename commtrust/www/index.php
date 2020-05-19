@@ -8,6 +8,8 @@ require_once('../lib/queries.php');
 require_once('../lib/login.php');
 
 remove('aid');
+if ($action == 'clear') remove('search');
+else $search = restore('search');
 
 $loader = new \Twig\Loader\FilesystemLoader('../templates');
 $twig = new \Twig\Environment($loader);
@@ -24,6 +26,7 @@ $vars['completed'] = $completed_claims;
 $vars['approved'] = $approved_claims;
 $vars['attestations'] = $attestations;
 $vars['url'] =  $_SERVER['PHP_SELF'];
+$vars['search'] =  $search;
 
 // Debug
 $vars['delays'] = print_r($Q_DELAY, true);

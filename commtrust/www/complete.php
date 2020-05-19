@@ -13,26 +13,27 @@ $twig = new \Twig\Environment($loader);
 
 $cid = restore('cid', 0);
 
-$r = get_claim_for_user($cid, $user_id);
+$r = get_claim_for_user($user_id, $cid);
+$ass_id = $r['assertion_id'];
 $evidence = $r['evidence'];
 $source = $r['source'];
 $proved_at = $r['proved_at'];
 $claim = new $r['handler']($r['config']);
 
+$aid = restore('aid', $ass_id);
+
 if ($action=='retract') {
-    retract_evidence($user_id, $cid);
+    retract_evidence($aid);
     $evidence = Null;
     $claim->clear($_SERVER['PHP_SELF']);
 }
 
-if (!$evidence) {
-    if ($action == 'start') {
-        $claim->start();
-        $evidence = json_encode($claim->get_attributes());
-        $source = json_encode($claim->get_source());
-        complete_evidence($user_id, $cid, $evidence, $source);
-        $claim->clear($_SERVER['PHP_SELF']);
-    }
+if ($action=='start') {
+    $claim->start();
+    $evidence = json_encode($claim->get_attributes());
+    $source = json_encode($claim->get_source());
+    complete_evidence($user_id, $cid, $aid, $evidence, $source);
+    $claim->clear($_SERVER['PHP_SELF']);
 }
 
 $vars = [
@@ -42,6 +43,7 @@ $vars = [
     'id' => $claim->get_id()
 ];
 
+$vars['aid'] = $ass_id;
 $vars['evidence'] =  json_decode($evidence, true);
 $vars['source'] = $source;
 $vars['proved_at'] = $proved_at;

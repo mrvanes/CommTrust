@@ -1,6 +1,6 @@
 {% extends 'index.twig' %}
 
-{% block evidence %}
+{% block content %}
 <h3>Claim {{ type }} via {{ id }}</h3>
 Unlocks the following Attestations:<br><br>
 {% for attestation in attestations %}
@@ -9,6 +9,7 @@ Unlocks the following Attestations:<br><br>
     </div>
 {% endfor %}
 {% if evidence %}
+    <input type=hidden name=aid value={{ aid }}>
     <p>Found evidence:<br>
     Acquired from {{ source }}<br>
     On: {{ proved_at }}<br>
@@ -16,7 +17,7 @@ Unlocks the following Attestations:<br><br>
         Approved by {{ claim['uid'] }} at {{ claim['approved_at'] }}<br>
         {% if claim['approved_with']['in_person'] %} with in_person<br>{% endif %}
     {% endif %}
-    <p><input type=submit name=action value=retract> evidence</p>
+    <p><input type=submit name=action value=retract> <input type=submit name=action value=start> evidence</p>
     <table>
     {% for k, vs in evidence %}
     <tr valign=top><td><b>{{ k }}</b></td><td>{% for v in vs %}{% if not v is iterable %}{{ v }}{% endif %}<br>{% endfor %}</td></tr>
@@ -29,16 +30,4 @@ Unlocks the following Attestations:<br><br>
         <p><input type=submit name=action value=start> claim</p>
     {% endif %}
 {% endif %}
-{% endblock %}
-
-{% block open %}
-{% endblock %}
-
-{% block completed %}
-{% endblock %}
-
-{% block approved %}
-{% endblock %}
-
-{% block attestations %}
 {% endblock %}

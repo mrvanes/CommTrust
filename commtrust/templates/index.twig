@@ -4,7 +4,7 @@
     <input type=hidden name=cid value={{ cid }}>
 {% endif %}
 
-{% block evidence %}
+{% block content %}
 <div class="container">
 <h2>Applicant vetting</h2>
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
@@ -12,72 +12,64 @@ Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliqu
 Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
 Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 </div>
-{% endblock %}
 
-{% block open %}
-    <div class="container">
-    <h3>Open Claims</h3>
-    {% for claim in open %}
-    <div class="idcard open">
-    <a href="/complete.php?cid={{ claim['claim_id'] }}">{{ claim['name'] }}</a><br>
+<div class="container">
+<h3>Unlocked Attestations</h3>
+{% for attestation in attestations %}
+    <div class="attestation">
+    {{ attestation['name'] }}
     </div>
-    {% endfor %}
-    </div>
-{% endblock %}
+{% endfor %}
+</div>
 
-{% block completed %}
-    <div class="container">
-    <h3>Completed Claims</h3>
-    {% for claim in completed %}
-    <div class="idcard completed">
-    <a href="/complete.php?cid={{ claim['claim_id'] }}">{{ claim['name'] }}</a><br>
-    <div class="evidence">
-    proved at {{ claim['proved_at'] }}<br>
-    via {{ claim['source'] }}
-    {% if claim['ra'] %}<br>
-    approved by {{ claim['ra'] }}<br>
-    on {{ claim['approved_at'] }}
-    {% endif %}<br>
-    {% for k,v in claim['card'] %}
-    {{ k }}: {{ v }}<br>
-    {% endfor %}
-    </div>
-    </div>
-    {% endfor %}
-    </div>
-{% endblock %}
+<div class="container">
+<h3>Approved Claims</h3>
+{% for claim in approved %}
+<div class="idcard approved">
+<a href="/complete.php?cid={{ claim['claim_id'] }}">{{ claim['name'] }}</a><br>
+<div class="evidence">
+proved at {{ claim['proved_at'] }}<br>
+via {{ claim['source'] }}
+{% if claim['ra'] %}<br>
+approved by {{ claim['ra'] }}<br>
+on {{ claim['approved_at'] }}
+{% endif %}<br>
+{% for k,v in claim['card'] %}
+{{ k }}: {{ v }}<br>
+{% endfor %}
+</div>
+</div>
+{% endfor %}
+</div>
 
-{% block approved %}
-    <div class="container">
-    <h3>Approved Claims</h3>
-    {% for claim in approved %}
-    <div class="idcard approved">
-    <a href="/complete.php?cid={{ claim['claim_id'] }}">{{ claim['name'] }}</a><br>
-    <div class="evidence">
-    proved at {{ claim['proved_at'] }}<br>
-    via {{ claim['source'] }}
-    {% if claim['ra'] %}<br>
-    approved by {{ claim['ra'] }}<br>
-    on {{ claim['approved_at'] }}
-    {% endif %}<br>
-    {% for k,v in claim['card'] %}
-    {{ k }}: {{ v }}<br>
-    {% endfor %}
-    </div>
-    </div>
-    {% endfor %}
-    </div>
-{% endblock %}
+<div class="container">
+<h3>Completed Claims</h3>
+{% for claim in completed %}
+<div class="idcard completed">
+<a href="/complete.php?cid={{ claim['claim_id'] }}">{{ claim['name'] }}</a><br>
+<div class="evidence">
+proved at {{ claim['proved_at'] }}<br>
+via {{ claim['source'] }}
+{% if claim['ra'] %}<br>
+approved by {{ claim['ra'] }}<br>
+on {{ claim['approved_at'] }}
+{% endif %}<br>
+{% for k,v in claim['card'] %}
+{{ k }}: {{ v }}<br>
+{% endfor %}
+</div>
+</div>
+{% endfor %}
+</div>
 
-{% block attestations %}
-    <div class="container">
-    <h3>Unlocked Attestations</h3>
-    {% for attestation in attestations %}
-        <div class="attestation">
-        {{ attestation['name'] }}
-        </div>
-    {% endfor %}
-    </div>
+<div class="container">
+<h3>Open Claims</h3>
+{% for claim in open %}
+<div class="idcard open">
+<a href="/complete.php?cid={{ claim['claim_id'] }}">{{ claim['name'] }}</a><br>
+</div>
+{% endfor %}
+</div>
 {% endblock %}
 
 {{ include('footer.twig') }}

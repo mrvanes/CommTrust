@@ -8,6 +8,8 @@ require_once('../lib/queries.php');
 require_once('../lib/login.php');
 
 remove('aid');
+if ($action == 'clear') remove('search');
+else $search = restore('search');
 
 $loader = new \Twig\Loader\FilesystemLoader('../templates-ra');
 $twig = new \Twig\Environment($loader);
@@ -20,12 +22,13 @@ if (!$user) {
     exit();
 }
 
-$approved_assertions = find_approved_assertions($user_id, 0);
-$unapproved_assertions = find_unapproved_assertions(0);
+$approved_assertions = find_approved_assertions($user_id, $search);
+$unapproved_assertions = find_unapproved_assertions($search);
 
 $vars['approved'] = $approved_assertions;
 $vars['unapproved'] = $unapproved_assertions;
 $vars['ra'] = $cn;
+$vars['search'] = $search;
 
 // Debug
 $vars['delays'] = print_r($Q_DELAY, true);

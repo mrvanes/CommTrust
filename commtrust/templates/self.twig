@@ -1,10 +1,10 @@
-{{ include('header.twig') }}
+{% extends 'index.twig' %}
 
+{% block content %}
 <table>
 {% for input in inputs %}
 <tr><td>{{ input }}</td><td><input name={{ input }}></td></tr>
 {% endfor %}
 </table>
 <input type=submit name=self_action value=submit>
-
-{{ include('footer.twig') }}
+{% endblock %}

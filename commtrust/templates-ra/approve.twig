@@ -1,6 +1,6 @@
 {% extends 'index.twig' %}
 
-{% block evidence %}
+{% block content %}
     <h3>Evidence of {{ claim['claim_name'] }} for {{ claim['for_user'] }}</h3>
     Acquired from {{ claim['source'] }}<br>
     Unlocks the following Attestations:<br><br>
@@ -22,11 +22,5 @@
     <tr valign=top><td><b>{{ k }}</b></td><td>{% for v in vs %}{% if not v is iterable %}{{ v }}{% endif %}<br>{% endfor %}</td></tr>
     {% endfor %}
     </table>
-{% endblock %}
-
-{% block approved %}
-{% endblock %}
-
-{% block unapproved %}
 {% endblock %}
 

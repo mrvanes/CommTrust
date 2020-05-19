@@ -46,7 +46,7 @@ function find_approved_claims($user_id) {
 }
 
 
-function find_unapproved_assertions($uid=0) {
+function find_unapproved_assertions($search) {
     $query  = "SELECT ass.assertion_id, c.name, c.type_id, c.config, ct.handler, ass.assertion_id, ass.evidence, ass.source, ass.proved_at, u.user_id, u.display_name ";
     $query .= "FROM assertions ass ";
     $query .= "LEFT JOIN approvals app ON app.assertion_id=ass.assertion_id ";
@@ -54,8 +54,7 @@ function find_unapproved_assertions($uid=0) {
     $query .= "LEFT JOIN claim_types ct ON ct.type_id=c.type_id ";
     $query .= "LEFT JOIN users u ON ass.user_id=u.user_id ";
     $query .= "WHERE app.approved_by IS NULL";
-
-    if ($uid) $query .= " AND ass.user_id=$uid";
+    if ($search) $query .= " AND u.display_name LIKE '%$search%'";
 
     db_select($query, $result);
     if ($result) foreach ($result as &$a) {
@@ -65,7 +64,7 @@ function find_unapproved_assertions($uid=0) {
     return $result;
 }
 
-function find_approved_assertions($user_id, $uid=0) {
+function find_approved_assertions($user_id, $search) {
     $query  = "SELECT ass.assertion_id, c.name, c.type_id, ct.handler, c.config, app.approved_at, ass.evidence, ass.source, ass.proved_at, u.user_id, u.display_name ";
     $query .= "FROM assertions ass ";
     $query .= "LEFT JOIN approvals app ON app.assertion_id=ass.assertion_id ";
@@ -73,7 +72,7 @@ function find_approved_assertions($user_id, $uid=0) {
     $query .= "LEFT JOIN claim_types ct ON ct.type_id=c.type_id ";
     $query .= "LEFT JOIN users u ON ass.user_id=u.user_id ";
     $query .= "WHERE app.approved_by=$user_id";
-    if ($uid) $query .= " and ass.user_id=$uid";
+    if ($search) $query .= " AND u.display_name LIKE '%$search%'";
 
     db_select($query, $result);
     if ($result) foreach ($result as &$a) {
@@ -112,14 +111,15 @@ function get_user($user_id) {
     return $r;
 }
 
-function get_claim_for_user($claim_id, $user_id) {
+function get_claim_for_user($user_id, $claim_id) {
     $query  = "SELECT c.name, ct.handler, c.config, ass.evidence, ass.assertion_id, ass.source, ass.proved_at, app.approved_by, u.uid, app.approved_at, app.approved_with ";
     $query .= "FROM claims c ";
     $query .= "LEFT JOIN assertions ass ON ass.claim_id=c.claim_id AND ass.user_id=$user_id ";
     $query .= "LEFT JOIN claim_types ct ON c.type_id=ct.type_id ";
     $query .= "LEFT JOIN approvals app ON ass.assertion_id=app.assertion_id ";
     $query .= "LEFT JOIN users u ON app.approved_by=u.user_id ";
-    $query .= "WHERE c.claim_id=$claim_id";
+    $query .= "WHERE c.claim_id=$claim_id ";
+    $query .= "ORDER BY ass.proved_at DESC LIMIT 1";
 
     $r = [];
 
@@ -130,13 +130,14 @@ function get_claim_for_user($claim_id, $user_id) {
         $r['handler'] = 'empty_handler';
         $r['config'] = '{}';
         $r['evidence'] = "";
+        $r['assertion_id'] = 0;
     }
 
     return $r;
 }
 
 function get_claim_for_assertion($assertion_id) {
-    $query  = "SELECT ass.user_id, ass.evidence, app.approved_by, app.approved_at, app.approved_with, ass.source, c.name, c.claim_id, for_user.display_name AS for_user_name, by_user.display_name AS by_user_name ";
+    $query  = "SELECT ass.user_id, ass.evidence, ass.proved_at, app.approved_by, app.approved_at, app.approved_with, ass.source, c.name, c.claim_id, for_user.display_name AS for_user_name, by_user.display_name AS by_user_name ";
     $query .= "FROM assertions  ass ";
     $query .= "LEFT JOIN claims  c ON c.claim_id=ass.claim_id ";
     $query .= "LEFT JOIN approvals app ON app.assertion_id=ass.assertion_id ";
@@ -154,6 +155,7 @@ function get_claim_for_assertion($assertion_id) {
         $r['approved_with'] = json_decode($result[0]['approved_with'], true);
         $r['claim_name'] = $result[0]['name'];
         $r['claim_id'] = $result[0]['claim_id'];
+        $r['proved_at'] = $result[0]['proved_at'];
         $r['by_user'] = $result[0]['by_user_name'];
         $r['for_user'] = $result[0]['for_user_name'];
     }
@@ -171,22 +173,40 @@ function get_attestations_for_claim($claim_id) {
     return $result;
 }
 
-function complete_evidence($user_id, $claim_id, $evidence, $source) {
-    $query = "INSERT INTO assertions (user_id, claim_id, evidence, source, proved_at) ";
-    $query .= "VALUES ($user_id, $claim_id, '$evidence', '$source', now()) ";
-    $query .= "ON DUPLICATE KEY UPDATE evidence='$evidence'";
+function complete_evidence($user_id, $claim_id, $aid, $evidence, $source) {
+    $query  = "SELECT * ";
+    $query .= "FROM assertions ass ";
+    $query .= "JOIN approvals app ON app.assertion_id=ass.assertion_id ";
+    $r = db_select($query, $result);
+    if ($r and $r['assertion_id'] == $aid) {
+        $query  = "UPDATE assertions ";
+        $query .= "SET evidence='$evidence', source='$source', proved_at=now() ";
+        $query .= "WHERE assertion_id=$aid";
+    } else {
+        $query = "INSERT INTO assertions (user_id, claim_id, evidence, source, proved_at) ";
+        $query .= "VALUES ($user_id, $claim_id, '$evidence', '$source', now()) ";
+    }
     db_exec($query);
 }
 
-function retract_evidence($user_id, $claim_id) {
+function retract_evidence($aid) {
     // This DELETE relies on CASCADE to approvals
     $query  = "DELETE ass ";
     $query .= "FROM assertions ass ";
-    $query .= "WHERE user_id=$user_id AND claim_id=$claim_id";
+//     $query .= "WHERE user_id=$user_id AND claim_id=$claim_id";
+    $query .= "WHERE ass.assertion_id=$aid";
     db_exec($query);
 }
 
 function approve_assertion($assertion_id, $user_id, $with) {
+    $c = get_claim_for_assertion($assertion_id);
+    $cid = $c['claim_id'];
+    $ctime = $c['proved_at'];
+    $cuser = $c['user_id'];
+    $query  = "DELETE FROM assertions ";
+    $query .= "WHERE user_id=$cuser AND claim_id=$cid ";
+    $query .= "AND proved_at < '$ctime'";
+    db_exec($query);
     $query  = "INSERT INTO approvals (assertion_id, approved_by, approved_at, approved_with) ";
     $query .= "VALUES ($assertion_id, $user_id, now(), '$with')";
     db_exec($query);

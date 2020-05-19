@@ -4,7 +4,7 @@
     <input type=hidden name=aid value={{ aid }}>
 {% endif %}
 
-{% block evidence %}
+{% block content %}
 <div class="container">
 <h2>RA vetting</h2>
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
@@ -12,45 +12,42 @@ Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliqu
 Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
 Excepteur sint occaecat cuaidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 </div>
-{% endblock %}
 
-{% block approved %}
-    <div class="container">
-    <h3>Approved Claims by {{ ra }}{% if user %} for {{ user['display_name'] }}{% endif %}</h3>
-    {% for assertion in approved %}
-    <div class="idcard approved">
-    <a href="/approve.php?aid={{ assertion['assertion_id'] }}">{{ assertion['name'] }}</a><br>
-    for <a href="/user.php?id={{ assertion['user_id'] }}">{{ assertion['display_name'] }}</a><br>
-    <div class="evidence">
-    proved on {{ assertion['proved_at'] }}<br>
-    via {{ assertion['source'] }}<br>
-    approved on {{ assertion['approved_at'] }}<br>
-    {% for k,v in assertion['card'] %}
-    {{ k }}: {{ v }}<br>
-    {% endfor %}
-    </div>
-    </div>
-    {% endfor %}
-    </div<
-{% endblock %}
+<div class="container">
+<h3>Approved Claims by {{ ra }}{% if user %} for {{ user['display_name'] }}{% endif %}</h3>
+{% for assertion in approved %}
+<div class="idcard approved">
+<a href="/approve.php?aid={{ assertion['assertion_id'] }}">{{ assertion['name'] }}</a><br>
+for <a href="/user.php?id={{ assertion['user_id'] }}">{{ assertion['display_name'] }}</a><br>
+<div class="evidence">
+proved on {{ assertion['proved_at'] }}<br>
+via {{ assertion['source'] }}<br>
+approved on {{ assertion['approved_at'] }}<br>
+{% for k,v in assertion['card'] %}
+{{ k }}: {{ v }}<br>
+{% endfor %}
+</div>
+</div>
+{% endfor %}
+</div<
 
-{% block unapproved %}
-    <div class="container">
-    <h3>Unapproved Claims{% if user %} for {{ user['display_name'] }}{% endif %}</h3>
-    {% for assertion in unapproved %}
-    <div class="idcard completed">
-    <a href="/approve.php?aid={{ assertion['assertion_id'] }}">{{ assertion['name'] }}</a><br>
-    for <a href="/user.php?id={{ assertion['user_id'] }}">{{ assertion['display_name'] }}</a><br>
-    <div class="evidence">
-    proved on: {{ assertion['proved_at'] }}<br>
-    via {{ assertion['source'] }}<br>
-    {% for k,v in assertion['card'] %}
-    {{ k }}: {{ v }}<br>
-    {% endfor %}
-    </div>
-    </div>
-    {% endfor %}
-    <div>
+<div class="container">
+<h3>Unapproved Claims{% if user %} for {{ user['display_name'] }}{% endif %}</h3>
+{% for assertion in unapproved %}
+<div class="idcard completed">
+<a href="/approve.php?aid={{ assertion['assertion_id'] }}">{{ assertion['name'] }}</a><br>
+for <a href="/user.php?id={{ assertion['user_id'] }}">{{ assertion['display_name'] }}</a><br>
+<div class="evidence">
+proved on: {{ assertion['proved_at'] }}<br>
+via {{ assertion['source'] }}<br>
+{% for k,v in assertion['card'] %}
+{{ k }}: {{ v }}<br>
+{% endfor %}
+</div>
+</div>
+{% endfor %}
+<div>
+
 {% endblock %}
 {{ include('footer.twig') }}
 
