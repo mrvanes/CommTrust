@@ -13,6 +13,6 @@
         <input type=text name=search value="{{ search  }}"> <input type=submit name=action value=search> <input type=submit name=action value=clear>
     </div>
     <div style="float: right;">
-        {{ name }} <input type=submit name=action value=logout>
+        {% if name is empty %}<input type=submit name=action value=login>{% else %}{{ name }} <input type=submit name=action value=logout>{% endif %}
     </div>
 </div>

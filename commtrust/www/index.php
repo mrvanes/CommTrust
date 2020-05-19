@@ -7,9 +7,9 @@ require_once('../lib/utils.php');
 require_once('../lib/queries.php');
 require_once('../lib/login.php');
 
-remove('aid');
-if ($action == 'clear') remove('search');
-else $search = restore('search');
+remove('aid', 0);
+if ($action == 'clear') $search = remove('search', '');
+else $search = restore('search', '');
 
 $loader = new \Twig\Loader\FilesystemLoader('../templates');
 $twig = new \Twig\Environment($loader);

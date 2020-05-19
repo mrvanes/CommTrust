@@ -94,22 +94,22 @@ function find_unlocked_attestations($user_id) {
     return $result;
 }
 
-function get_user($user_id) {
-    $query  = "SELECT uid, display_name, ra ";
-    $query .= "FROM users ";
-    $query .= "WHERE user_id=$user_id";
-    db_select($query, $result);
-
-    if (db_select($query, $result)) {
-        $r['uid'] = $result[0]['uid'];
-        $r['display_name'] = $result[0]['display_name'];
-        $r['ra'] = $result[0]['ra'];
-    } else {
-        $r = [];
-    }
-
-    return $r;
-}
+// function get_user($user_id) {
+//     $query  = "SELECT uid, display_name, ra ";
+//     $query .= "FROM users ";
+//     $query .= "WHERE user_id=$user_id";
+//     db_select($query, $result);
+//
+//     if (db_select($query, $result)) {
+//         $r['uid'] = $result[0]['uid'];
+//         $r['display_name'] = $result[0]['display_name'];
+//         $r['ra'] = $result[0]['ra'];
+//     } else {
+//         $r = [];
+//     }
+//
+//     return $r;
+// }
 
 function get_claim_for_user($user_id, $claim_id) {
     $query  = "SELECT c.name, ct.handler, c.config, ass.evidence, ass.assertion_id, ass.source, ass.proved_at, app.approved_by, u.uid, app.approved_at, app.approved_with ";
@@ -173,15 +173,16 @@ function get_attestations_for_claim($claim_id) {
     return $result;
 }
 
-function complete_evidence($user_id, $claim_id, $aid, $evidence, $source) {
-    $query  = "SELECT * ";
+function complete_evidence($user_id, $claim_id, $ass_id, $evidence, $source) {
+    $query  = "SELECT ass.assertion_id ";
     $query .= "FROM assertions ass ";
     $query .= "JOIN approvals app ON app.assertion_id=ass.assertion_id ";
+    $query .= "WHERE ass.user_id=$user_id AND ass.claim_id=$claim_id";
     $r = db_select($query, $result);
-    if ($r and $r['assertion_id'] == $aid) {
+    if ($r and $r['assertion_id'] == $ass_id) {
         $query  = "UPDATE assertions ";
         $query .= "SET evidence='$evidence', source='$source', proved_at=now() ";
-        $query .= "WHERE assertion_id=$aid";
+        $query .= "WHERE assertion_id=$ass_id";
     } else {
         $query = "INSERT INTO assertions (user_id, claim_id, evidence, source, proved_at) ";
         $query .= "VALUES ($user_id, $claim_id, '$evidence', '$source', now()) ";

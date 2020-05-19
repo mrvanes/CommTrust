@@ -20,9 +20,8 @@ $source = $r['source'];
 $proved_at = $r['proved_at'];
 $claim = new $r['handler']($r['config']);
 
-$aid = restore('aid', $ass_id);
-
 if ($action=='retract') {
+    $aid = restore('aid', $ass_id);
     retract_evidence($aid);
     $evidence = Null;
     $claim->clear($_SERVER['PHP_SELF']);
@@ -32,7 +31,7 @@ if ($action=='start') {
     $claim->start();
     $evidence = json_encode($claim->get_attributes());
     $source = json_encode($claim->get_source());
-    complete_evidence($user_id, $cid, $aid, $evidence, $source);
+    complete_evidence($user_id, $cid, $ass_id, $evidence, $source);
     $claim->clear($_SERVER['PHP_SELF']);
 }
 

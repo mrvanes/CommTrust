@@ -13,6 +13,8 @@ Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu 
 Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 </div>
 
+{% if name is not empty %}
+
 <div class="container">
 <h3>Unlocked Attestations</h3>
 {% for attestation in attestations %}
@@ -70,6 +72,9 @@ on {{ claim['approved_at'] }}
 </div>
 {% endfor %}
 </div>
+
+{% endif %}
+
 {% endblock %}
 
 {{ include('footer.twig') }}

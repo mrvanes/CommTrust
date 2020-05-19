@@ -10211,3 +10211,599 @@ Session:sess[ ]
 
 05-13 6:38:50  DEBUG userinfo response = {"sub":"1a08411743e829c787a0152d004c6d48a14e921ed5023a65bb39ad72661cca78","birthdate":"2000-08-08","email":"alice@wonderland.com","email_verified":true,"family_name":"Yamada","gender":"female","given_name":"Alice","locale":"en","middle_name":null,"name":"Alice Yamada","nickname":"Standard Alice Nickname","picture":"http:\/\/op.commtrust.local\/phpOp\/profiles\/smiling_woman.jpg","preferred_username":"AlicePreferred","profile":"http:\/\/www.wonderland.com\/alice","updated_at":"23453453","website":"http:\/\/www.wonderland.com","zoneinfo":"America\/Los Angeles"}
 
+==============================================================================
+05-19 7:34:15  DEBUG path_info: /auth 
+{"url":"/auth?client_id=commtrust&redirect_uri=http%3A%2F%2Fsrv.commtrust.local%2Fsimplesaml%2Fmodule.php%2Fopenidconnect%2Fresume.php&response_type=code&scope=openid+profile+email&state=_db5f837f27f66d4a63a01960bb3997d037503b9ca5","ip":"172.22.10.1","http_method":"GET","server":"op.commtrust.local","referrer":"http://srv.commtrust.local/complete.php?cid=6"} []
+----------------------------------------------------------
+
+==============================================================================
+05-19 7:34:15  DEBUG Request: Array
+(
+    [client_id] => commtrust
+    [redirect_uri] => http://srv.commtrust.local/simplesaml/module.php/openidconnect/resume.php
+    [response_type] => code
+    [scope] => openid profile email
+    [state] => _db5f837f27f66d4a63a01960bb3997d037503b9ca5
+)
+
+Input: 
+Session:Array
+(
+)
+ 
+{"url":"/auth?client_id=commtrust&redirect_uri=http%3A%2F%2Fsrv.commtrust.local%2Fsimplesaml%2Fmodule.php%2Fopenidconnect%2Fresume.php&response_type=code&scope=openid+profile+email&state=_db5f837f27f66d4a63a01960bb3997d037503b9ca5","ip":"172.22.10.1","http_method":"GET","server":"op.commtrust.local","referrer":"http://srv.commtrust.local/complete.php?cid=6"} []
+----------------------------------------------------------
+
+05-19 7:34:15  DEBUG prompt = 
+
+05-19 7:34:15  DEBUG num prompt = 0 Array
+(
+)
+
+
+==============================================================================
+05-19 7:34:15  DEBUG path_info: /favicon.ico 
+{"url":"/favicon.ico","ip":"172.22.10.1","http_method":"GET","server":"op.commtrust.local","referrer":"http://op.commtrust.local/auth?client_id=commtrust&redirect_uri=http%3A%2F%2Fsrv.commtrust.local%2Fsimplesaml%2Fmodule.php%2Fopenidconnect%2Fresume.php&response_type=code&scope=openid+profile+email&state=_db5f837f27f66d4a63a01960bb3997d037503b9ca5"} []
+----------------------------------------------------------
+
+==============================================================================
+05-19 7:34:15  DEBUG Request: req[ ]
+Input: 
+Session:Array
+(
+    [get] => Array
+        (
+            [client_id] => commtrust
+            [redirect_uri] => http://srv.commtrust.local/simplesaml/module.php/openidconnect/resume.php
+            [response_type] => code
+            [scope] => openid profile email
+            [state] => _db5f837f27f66d4a63a01960bb3997d037503b9ca5
+        )
+
+    [rpfA] => Array
+        (
+            [client_id] => commtrust
+            [redirect_uri] => http://srv.commtrust.local/simplesaml/module.php/openidconnect/resume.php
+            [response_type] => code
+            [scope] => openid profile email
+            [state] => _db5f837f27f66d4a63a01960bb3997d037503b9ca5
+        )
+
+)
+ 
+{"url":"/favicon.ico","ip":"172.22.10.1","http_method":"GET","server":"op.commtrust.local","referrer":"http://op.commtrust.local/auth?client_id=commtrust&redirect_uri=http%3A%2F%2Fsrv.commtrust.local%2Fsimplesaml%2Fmodule.php%2Fopenidconnect%2Fresume.php&response_type=code&scope=openid+profile+email&state=_db5f837f27f66d4a63a01960bb3997d037503b9ca5"} []
+----------------------------------------------------------
+
+==============================================================================
+05-19 7:34:16  DEBUG path_info: /login 
+{"url":"/auth/login","ip":"172.22.10.1","http_method":"POST","server":"op.commtrust.local","referrer":"http://op.commtrust.local/auth?client_id=commtrust&redirect_uri=http%3A%2F%2Fsrv.commtrust.local%2Fsimplesaml%2Fmodule.php%2Fopenidconnect%2Fresume.php&response_type=code&scope=openid+profile+email&state=_db5f837f27f66d4a63a01960bb3997d037503b9ca5"} []
+----------------------------------------------------------
+
+==============================================================================
+05-19 7:34:16  DEBUG Request: Array
+(
+    [username] => alice
+    [password] => wonderland
+    [persist] => on
+)
+
+Input: username=alice&password=wonderland&persist=on
+Session:Array
+(
+    [get] => Array
+        (
+            [client_id] => commtrust
+            [redirect_uri] => http://srv.commtrust.local/simplesaml/module.php/openidconnect/resume.php
+            [response_type] => code
+            [scope] => openid profile email
+            [state] => _db5f837f27f66d4a63a01960bb3997d037503b9ca5
+        )
+
+    [rpfA] => Array
+        (
+            [client_id] => commtrust
+            [redirect_uri] => http://srv.commtrust.local/simplesaml/module.php/openidconnect/resume.php
+            [response_type] => code
+            [scope] => openid profile email
+            [state] => _db5f837f27f66d4a63a01960bb3997d037503b9ca5
+        )
+
+)
+ 
+{"url":"/auth/login","ip":"172.22.10.1","http_method":"POST","server":"op.commtrust.local","referrer":"http://op.commtrust.local/auth?client_id=commtrust&redirect_uri=http%3A%2F%2Fsrv.commtrust.local%2Fsimplesaml%2Fmodule.php%2Fopenidconnect%2Fresume.php&response_type=code&scope=openid+profile+email&state=_db5f837f27f66d4a63a01960bb3997d037503b9ca5"} []
+----------------------------------------------------------
+
+05-19 7:34:16  DEBUG Auth_time = 1589873656
+
+05-19 7:34:16  DEBUG session id = f1ir93rfh44fmhqoiggtbmv4bl
+
+05-19 7:34:16  DEBUG prompt = 
+
+05-19 7:34:16  DEBUG get_userinfo_claims Array
+(
+    [client_id] => commtrust
+    [redirect_uri] => http://srv.commtrust.local/simplesaml/module.php/openidconnect/resume.php
+    [response_type] => code
+    [scope] => openid profile email
+    [state] => _db5f837f27f66d4a63a01960bb3997d037503b9ca5
+)
+ scopes = openid profile email
+
+05-19 7:34:16  DEBUG userinfo claims = Array
+(
+    [email] => 0
+    [email_verified] => 0
+    [name] => 0
+    [given_name] => 0
+    [family_name] => 0
+    [middle_name] => 0
+    [nickname] => 0
+    [preferred_username] => 0
+    [profile] => 0
+    [picture] => 0
+    [website] => 0
+    [gender] => 0
+    [birthdate] => 0
+    [zoneinfo] => 0
+    [locale] => 0
+    [updated_at] => 0
+)
+
+
+05-19 7:34:16  DEBUG id_token claims = Array
+(
+)
+
+
+05-19 7:34:16  DEBUG unique keys = Array
+(
+    [0] => birthdate
+    [1] => email
+    [2] => email_verified
+    [3] => family_name
+    [4] => gender
+    [5] => given_name
+    [6] => locale
+    [7] => middle_name
+    [8] => name
+    [9] => nickname
+    [10] => picture
+    [11] => preferred_username
+    [12] => profile
+    [13] => updated_at
+    [14] => website
+    [15] => zoneinfo
+)
+
+
+05-19 7:34:16  DEBUG requested_claims = Array
+(
+    [birthdate] => 0
+    [email] => 0
+    [email_verified] => 0
+    [family_name] => 0
+    [gender] => 0
+    [given_name] => 0
+    [locale] => 0
+    [middle_name] => 0
+    [name] => 0
+    [nickname] => 0
+    [picture] => 0
+    [preferred_username] => 0
+    [profile] => 0
+    [updated_at] => 0
+    [website] => 0
+    [zoneinfo] => 0
+)
+
+
+05-19 7:34:16  INFO requested claims = Array
+(
+    [birthdate] => 0
+    [email] => 0
+    [email_verified] => 0
+    [family_name] => 0
+    [gender] => 0
+    [given_name] => 0
+    [locale] => 0
+    [middle_name] => 0
+    [name] => 0
+    [nickname] => 0
+    [picture] => 0
+    [preferred_username] => 0
+    [profile] => 0
+    [updated_at] => 0
+    [website] => 0
+    [zoneinfo] => 0
+)
+
+
+==============================================================================
+05-19 7:34:17  DEBUG path_info: /favicon.ico 
+{"url":"/favicon.ico","ip":"172.22.10.1","http_method":"GET","server":"op.commtrust.local","referrer":"http://op.commtrust.local/auth/login"} []
+----------------------------------------------------------
+
+==============================================================================
+05-19 7:34:17  DEBUG Request: req[ ]
+Input: 
+Session:Array
+(
+    [get] => Array
+        (
+            [client_id] => commtrust
+            [redirect_uri] => http://srv.commtrust.local/simplesaml/module.php/openidconnect/resume.php
+            [response_type] => code
+            [scope] => openid profile email
+            [state] => _db5f837f27f66d4a63a01960bb3997d037503b9ca5
+        )
+
+    [rpfA] => Array
+        (
+            [client_id] => commtrust
+            [redirect_uri] => http://srv.commtrust.local/simplesaml/module.php/openidconnect/resume.php
+            [response_type] => code
+            [scope] => openid profile email
+            [state] => _db5f837f27f66d4a63a01960bb3997d037503b9ca5
+        )
+
+    [login] => 1
+    [username] => alice
+    [persist] => on
+    [auth_time] => 1589873656
+    [ops] => 29ed8768f1a24c3a7a5b4d69a3de700d
+)
+ 
+{"url":"/favicon.ico","ip":"172.22.10.1","http_method":"GET","server":"op.commtrust.local","referrer":"http://op.commtrust.local/auth/login"} []
+----------------------------------------------------------
+
+==============================================================================
+05-19 7:34:18  DEBUG path_info: /confirm_userinfo 
+{"url":"/auth/login/confirm_userinfo","ip":"172.22.10.1","http_method":"POST","server":"op.commtrust.local","referrer":"http://op.commtrust.local/auth/login"} []
+----------------------------------------------------------
+
+==============================================================================
+05-19 7:34:18  DEBUG Request: Array
+(
+    [mode] => ax_confirm
+    [agreed] => 1
+    [trust] => once
+    [confirm] => confirmed
+)
+
+Input: mode=ax_confirm&agreed=1&trust=once&confirm=confirmed
+Session:Array
+(
+    [get] => Array
+        (
+            [client_id] => commtrust
+            [redirect_uri] => http://srv.commtrust.local/simplesaml/module.php/openidconnect/resume.php
+            [response_type] => code
+            [scope] => openid profile email
+            [state] => _db5f837f27f66d4a63a01960bb3997d037503b9ca5
+        )
+
+    [rpfA] => Array
+        (
+            [client_id] => commtrust
+            [redirect_uri] => http://srv.commtrust.local/simplesaml/module.php/openidconnect/resume.php
+            [response_type] => code
+            [scope] => openid profile email
+            [state] => _db5f837f27f66d4a63a01960bb3997d037503b9ca5
+        )
+
+    [login] => 1
+    [username] => alice
+    [persist] => on
+    [auth_time] => 1589873656
+    [ops] => 29ed8768f1a24c3a7a5b4d69a3de700d
+)
+ 
+{"url":"/auth/login/confirm_userinfo","ip":"172.22.10.1","http_method":"POST","server":"op.commtrust.local","referrer":"http://op.commtrust.local/auth/login"} []
+----------------------------------------------------------
+
+05-19 7:34:18  DEBUG get_userinfo_claims Array
+(
+    [client_id] => commtrust
+    [redirect_uri] => http://srv.commtrust.local/simplesaml/module.php/openidconnect/resume.php
+    [response_type] => code
+    [scope] => openid profile email
+    [state] => _db5f837f27f66d4a63a01960bb3997d037503b9ca5
+    [session_id] => f1ir93rfh44fmhqoiggtbmv4bl
+    [auth_time] => 1589873656
+)
+ scopes = openid profile email
+
+05-19 7:34:18  DEBUG userinfo claims = Array
+(
+    [email] => 0
+    [email_verified] => 0
+    [name] => 0
+    [given_name] => 0
+    [family_name] => 0
+    [middle_name] => 0
+    [nickname] => 0
+    [preferred_username] => 0
+    [profile] => 0
+    [picture] => 0
+    [website] => 0
+    [gender] => 0
+    [birthdate] => 0
+    [zoneinfo] => 0
+    [locale] => 0
+    [updated_at] => 0
+)
+
+
+05-19 7:34:18  DEBUG id_token claims = Array
+(
+)
+
+
+05-19 7:34:18  DEBUG unique keys = Array
+(
+    [0] => birthdate
+    [1] => email
+    [2] => email_verified
+    [3] => family_name
+    [4] => gender
+    [5] => given_name
+    [6] => locale
+    [7] => middle_name
+    [8] => name
+    [9] => nickname
+    [10] => picture
+    [11] => preferred_username
+    [12] => profile
+    [13] => updated_at
+    [14] => website
+    [15] => zoneinfo
+)
+
+
+05-19 7:34:18  DEBUG requested_claims = Array
+(
+    [birthdate] => 0
+    [email] => 0
+    [email_verified] => 0
+    [family_name] => 0
+    [gender] => 0
+    [given_name] => 0
+    [locale] => 0
+    [middle_name] => 0
+    [name] => 0
+    [nickname] => 0
+    [picture] => 0
+    [preferred_username] => 0
+    [profile] => 0
+    [updated_at] => 0
+    [website] => 0
+    [zoneinfo] => 0
+)
+
+
+05-19 7:34:18  DEBUG ss = sha256(commtrusthttp://srv.commtrust.local29ed8768f1a24c3a7a5b4d69a3de700dec787e85e4d8b15389fb6214d6aaaa07).ec787e85e4d8b15389fb6214d6aaaa07
+
+05-19 7:34:18  DEBUG URL = http://srv.commtrust.local/simplesaml/module.php/openidconnect/resume.php params = Array
+(
+    [state] => _db5f837f27f66d4a63a01960bb3997d037503b9ca5
+    [session_state] => 8bd226715f5281cd824b02dcd7fa34e7443fe11e5be957672b7766fe4841797c.ec787e85e4d8b15389fb6214d6aaaa07
+    [code] => BmO0ERXssxLrmeM2behGdtSYP7vvY2rWx8-3-1PUx4k
+)
+ mode = query
+
+05-19 7:34:18  DEBUG redirect to http://srv.commtrust.local/simplesaml/module.php/openidconnect/resume.php?state=_db5f837f27f66d4a63a01960bb3997d037503b9ca5&session_state=8bd226715f5281cd824b02dcd7fa34e7443fe11e5be957672b7766fe4841797c.ec787e85e4d8b15389fb6214d6aaaa07&code=BmO0ERXssxLrmeM2behGdtSYP7vvY2rWx8-3-1PUx4k
+
+==============================================================================
+05-19 7:34:18  DEBUG path_info: /token 
+{"url":"/token","ip":"172.22.10.2","http_method":"POST","server":"op.commtrust.local","referrer":"NULL"} []
+----------------------------------------------------------
+
+==============================================================================
+05-19 7:34:18  DEBUG Request: Array
+(
+    [client_id] => commtrust
+    [redirect_uri] => http://srv.commtrust.local/simplesaml/module.php/openidconnect/resume.php
+    [grant_type] => authorization_code
+    [code] => BmO0ERXssxLrmeM2behGdtSYP7vvY2rWx8-3-1PUx4k
+    [client_secret] => commtrust_secret
+)
+
+Input: client_id=commtrust&redirect_uri=http%3A%2F%2Fsrv.commtrust.local%2Fsimplesaml%2Fmodule.php%2Fopenidconnect%2Fresume.php&grant_type=authorization_code&code=BmO0ERXssxLrmeM2behGdtSYP7vvY2rWx8-3-1PUx4k&client_secret=commtrust_secret
+Session:sess[ ] 
+{"url":"/token","ip":"172.22.10.2","http_method":"POST","server":"op.commtrust.local","referrer":"NULL"} []
+----------------------------------------------------------
+
+05-19 7:34:18  INFO ****** handle_token
+
+05-19 7:34:18  INFO http://srv.commtrust.local/simplesaml/module.php/openidconnect/resume.php <> http://srv.commtrust.local/simplesaml/module.php/openidconnect/resume.php
+
+05-19 7:34:18  DEBUG commtrust
+client_secret_post
+
+05-19 7:34:18  INFO authenticating client_id commtrust with client_secret commtrust_secret
+Result : 1
+
+05-19 7:34:18  DEBUG sig = 'RS256' alg='' enc=''
+
+05-19 7:34:18  DEBUG requested idtoken claims = Array
+(
+)
+
+
+05-19 7:34:18  DEBUG user id alice wrapped = 1a08411743e829c787a0152d004c6d48a14e921ed5023a65bb39ad72661cca78
+
+05-19 7:34:18  DEBUG handle_token id_token_obj = Array
+(
+    [iss] => http://op.commtrust.local/phpOp
+    [sub] => 1a08411743e829c787a0152d004c6d48a14e921ed5023a65bb39ad72661cca78
+    [aud] => Array
+        (
+            [0] => commtrust
+        )
+
+    [exp] => 1589873958
+    [iat] => 1589873658
+    [at_hash] => P0C9ZJCHHTWn8tROQpOd-g
+)
+
+
+05-19 7:34:18  DEBUG sign_encrypt sig = RS256 alg =  enc = 
+
+05-19 7:34:18  DEBUG jws = eyJhbGciOiJSUzI1NiIsImprdSI6Imh0dHA6XC9cL29wLmNvbW10cnVzdC5sb2NhbFwvcGhwT3BcL29wLmp3ayIsImtpZCI6IlBIUE9QLTAwUyJ9.eyJpc3MiOiJodHRwOlwvXC9vcC5jb21tdHJ1c3QubG9jYWxcL3BocE9wIiwic3ViIjoiMWEwODQxMTc0M2U4MjljNzg3YTAxNTJkMDA0YzZkNDhhMTRlOTIxZWQ1MDIzYTY1YmIzOWFkNzI2NjFjY2E3OCIsImF1ZCI6WyJjb21tdHJ1c3QiXSwiZXhwIjoxNTg5ODczOTU4LCJpYXQiOjE1ODk4NzM2NTgsImF0X2hhc2giOiJQMEM5WkpDSEhUV244dFJPUXBPZC1nIn0.OgRHc-JD1GRQ80cG2NUnkkgRAoV5px61F4OP72fsz0l7KZVORI_VcI214eLrsFoSUm6cnhgwu9JJ6uPua78qXQWbUV3vA1MugBjTufiX8GP0Ll3doKbUOL_7rJy57NJcGrHW23i1ggGQiiaXTbt7deqO25JvJIJB7OL2syROhqOZHKSI9OFwuJbfJh1tb8LaGp94iKaukxWuvtNhcr6RZQtOhRGl5mLZ8dauXVC5ygA2dQNI2H5gRhsVhsuIDa7mncC_doqG104P_inddvinYjZkqLs8-dBIxk6ztTIIN1SiGKW2wPQm1j87zIsopAT6yCFRxyj0xOrumBbLAPanEA
+
+05-19 7:34:18  DEBUG token response = Array
+(
+    [access_token] => O6au8IxcOVptt5s36qNtGv-K6mq__C1qpUc58Rb0aLs
+    [token_type] => Bearer
+    [expires_in] => 3600
+    [id_token] => eyJhbGciOiJSUzI1NiIsImprdSI6Imh0dHA6XC9cL29wLmNvbW10cnVzdC5sb2NhbFwvcGhwT3BcL29wLmp3ayIsImtpZCI6IlBIUE9QLTAwUyJ9.eyJpc3MiOiJodHRwOlwvXC9vcC5jb21tdHJ1c3QubG9jYWxcL3BocE9wIiwic3ViIjoiMWEwODQxMTc0M2U4MjljNzg3YTAxNTJkMDA0YzZkNDhhMTRlOTIxZWQ1MDIzYTY1YmIzOWFkNzI2NjFjY2E3OCIsImF1ZCI6WyJjb21tdHJ1c3QiXSwiZXhwIjoxNTg5ODczOTU4LCJpYXQiOjE1ODk4NzM2NTgsImF0X2hhc2giOiJQMEM5WkpDSEhUV244dFJPUXBPZC1nIn0.OgRHc-JD1GRQ80cG2NUnkkgRAoV5px61F4OP72fsz0l7KZVORI_VcI214eLrsFoSUm6cnhgwu9JJ6uPua78qXQWbUV3vA1MugBjTufiX8GP0Ll3doKbUOL_7rJy57NJcGrHW23i1ggGQiiaXTbt7deqO25JvJIJB7OL2syROhqOZHKSI9OFwuJbfJh1tb8LaGp94iKaukxWuvtNhcr6RZQtOhRGl5mLZ8dauXVC5ygA2dQNI2H5gRhsVhsuIDa7mncC_doqG104P_inddvinYjZkqLs8-dBIxk6ztTIIN1SiGKW2wPQm1j87zIsopAT6yCFRxyj0xOrumBbLAPanEA
+)
+
+
+==============================================================================
+05-19 7:34:18  DEBUG path_info: /userinfo 
+{"url":"/userinfo","ip":"172.22.10.2","http_method":"GET","server":"op.commtrust.local","referrer":"NULL"} []
+----------------------------------------------------------
+
+==============================================================================
+05-19 7:34:18  DEBUG Request: req[ ]
+Input: 
+Session:sess[ ] 
+{"url":"/userinfo","ip":"172.22.10.2","http_method":"GET","server":"op.commtrust.local","referrer":"NULL"} []
+----------------------------------------------------------
+
+05-19 7:34:18  DEBUG Host: op.commtrust.local
+
+05-19 7:34:18  DEBUG Connection: close
+
+05-19 7:34:18  DEBUG Accept-Encoding: gzip, deflate
+
+05-19 7:34:18  DEBUG User-Agent: Zend\Http\Client
+
+05-19 7:34:18  DEBUG Authorization: Bearer O6au8IxcOVptt5s36qNtGv-K6mq__C1qpUc58Rb0aLs
+
+05-19 7:34:18  DEBUG headers = Array
+(
+    [host] => op.commtrust.local
+    [connection] => close
+    [accept-encoding] => gzip, deflate
+    [user-agent] => Zend\Http\Client
+    [authorization] => Bearer O6au8IxcOVptt5s36qNtGv-K6mq__C1qpUc58Rb0aLs
+)
+
+
+05-19 7:34:18  DEBUG authorization header = Bearer O6au8IxcOVptt5s36qNtGv-K6mq__C1qpUc58Rb0aLs
+
+05-19 7:34:18  DEBUG pieces = Array
+(
+    [0] => Bearer
+    [1] => O6au8IxcOVptt5s36qNtGv-K6mq__C1qpUc58Rb0aLs
+)
+
+
+05-19 7:34:18  DEBUG token = O6au8IxcOVptt5s36qNtGv-K6mq__C1qpUc58Rb0aLs
+
+05-19 7:34:18  DEBUG user id alice wrapped = 1a08411743e829c787a0152d004c6d48a14e921ed5023a65bb39ad72661cca78
+
+05-19 7:34:18  DEBUG wrapped ACè)Ç‡ - LmH¡N’Õ:e»9­rfÊx unwrapped = 1:alice
+
+05-19 7:34:18  DEBUG userid = 1a08411743e829c787a0152d004c6d48a14e921ed5023a65bb39ad72661cca78  unwrapped = alice
+
+05-19 7:34:18  DEBUG get_userinfo_claims Array
+(
+    [client_id] => commtrust
+    [redirect_uri] => http://srv.commtrust.local/simplesaml/module.php/openidconnect/resume.php
+    [response_type] => code
+    [scope] => openid profile email
+    [state] => _db5f837f27f66d4a63a01960bb3997d037503b9ca5
+    [session_id] => f1ir93rfh44fmhqoiggtbmv4bl
+    [auth_time] => 1589873656
+)
+ scopes = openid profile email
+
+05-19 7:34:18  DEBUG ALLOWED CLAIMS = Array
+(
+    [birthdate] => 0
+    [email] => 0
+    [email_verified] => 0
+    [family_name] => 0
+    [gender] => 0
+    [given_name] => 0
+    [locale] => 0
+    [middle_name] => 0
+    [name] => 0
+    [nickname] => 0
+    [picture] => 0
+    [preferred_username] => 0
+    [profile] => 0
+    [updated_at] => 0
+    [website] => 0
+    [zoneinfo] => 0
+)
+
+
+05-19 7:34:18  DEBUG REQUESTED_USER_INFO = Array
+(
+    [email] => 0
+    [email_verified] => 0
+    [name] => 0
+    [given_name] => 0
+    [family_name] => 0
+    [middle_name] => 0
+    [nickname] => 0
+    [preferred_username] => 0
+    [profile] => 0
+    [picture] => 0
+    [website] => 0
+    [gender] => 0
+    [birthdate] => 0
+    [zoneinfo] => 0
+    [locale] => 0
+    [updated_at] => 0
+)
+
+
+05-19 7:34:18  DEBUG account requested claims = Array
+(
+    [birthdate] => 0
+    [email] => 0
+    [email_verified] => 0
+    [family_name] => 0
+    [gender] => 0
+    [given_name] => 0
+    [locale] => 0
+    [middle_name] => 0
+    [name] => 0
+    [nickname] => 0
+    [picture] => 0
+    [preferred_username] => 0
+    [profile] => 0
+    [updated_at] => 0
+    [website] => 0
+    [zoneinfo] => 0
+)
+
+
+05-19 7:34:18  DEBUG returning = Array
+(
+    [birthdate] => 2000-08-08
+    [email] => alice@wonderland.com
+    [email_verified] => 1
+    [family_name] => Yamada
+    [gender] => female
+    [given_name] => Alice
+    [locale] => en
+    [middle_name] => 
+    [name] => Alice Yamada
+    [nickname] => Standard Alice Nickname
+    [picture] => http://op.commtrust.local/phpOp/profiles/smiling_woman.jpg
+    [preferred_username] => AlicePreferred
+    [profile] => http://www.wonderland.com/alice
+    [updated_at] => 23453453
+    [website] => http://www.wonderland.com
+    [zoneinfo] => America/Los Angeles
+)
+
+
+05-19 7:34:18  DEBUG userinfo response = {"sub":"1a08411743e829c787a0152d004c6d48a14e921ed5023a65bb39ad72661cca78","birthdate":"2000-08-08","email":"alice@wonderland.com","email_verified":true,"family_name":"Yamada","gender":"female","given_name":"Alice","locale":"en","middle_name":null,"name":"Alice Yamada","nickname":"Standard Alice Nickname","picture":"http:\/\/op.commtrust.local\/phpOp\/profiles\/smiling_woman.jpg","preferred_username":"AlicePreferred","profile":"http:\/\/www.wonderland.com\/alice","updated_at":"23453453","website":"http:\/\/www.wonderland.com","zoneinfo":"America\/Los Angeles"}
+

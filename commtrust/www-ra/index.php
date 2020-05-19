@@ -7,9 +7,9 @@ require_once('../lib/utils.php');
 require_once('../lib/queries.php');
 require_once('../lib/login.php');
 
-remove('aid');
-if ($action == 'clear') remove('search');
-else $search = restore('search');
+remove('aid', 0);
+if ($action == 'clear') $search = remove('search', '');
+$search = restore('search', '');
 
 $loader = new \Twig\Loader\FilesystemLoader('../templates-ra');
 $twig = new \Twig\Environment($loader);
@@ -18,6 +18,11 @@ $vars['name'] = $cn;
 $vars['url'] = $_SERVER['PHP_SELF'];
 
 if (!$user) {
+// Debug
+    $vars['delays'] = print_r($Q_DELAY, true);
+    $vars['post'] = print_r($_POST, true);
+    $vars['get'] = print_r($_GET, true);
+    $vars['session'] = print_r($_SESSION, true);
     echo $twig->render('error.twig', $vars);
     exit();
 }
