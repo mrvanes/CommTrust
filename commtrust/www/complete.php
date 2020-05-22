@@ -14,11 +14,12 @@ $twig = new \Twig\Environment($loader);
 $cid = restore('cid', 0);
 
 $r = get_claim_for_user($user_id, $cid);
+$handler = $r['handler'];
 $ass_id = $r['assertion_id'];
 $evidence = $r['evidence'];
 $source = $r['source'];
 $proved_at = $r['proved_at'];
-$claim = new $r['handler']($r['config']);
+$claim = new $handler($r['config']);
 
 if ($action=='retract') {
     $aid = restore('aid', $ass_id);
@@ -43,7 +44,7 @@ $vars = [
 ];
 
 $vars['aid'] = $ass_id;
-$vars['evidence'] =  json_decode($evidence, true);
+$vars['evidence'] =  $handler::get_evidence(json_decode($evidence, true));
 $vars['source'] = $source;
 $vars['proved_at'] = $proved_at;
 $vars['url'] = $_SERVER['PHP_SELF'];

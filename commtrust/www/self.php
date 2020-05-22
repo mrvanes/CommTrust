@@ -18,7 +18,7 @@ $vars['url'] =  $_SERVER['PHP_SELF'];
 
 $self_action = isset($_POST['self_action'])?$_POST['self_action']:'';
 if ($self_action == 'submit') {
-    remove('self:attributes');
+    remove('self:attributes', '');
     foreach ($inputs as $input) {
         $self_attributes[$input] = [$_POST[$input]];
     }

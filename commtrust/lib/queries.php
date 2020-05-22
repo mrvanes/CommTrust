@@ -45,6 +45,24 @@ function find_approved_claims($user_id) {
     return $result;
 }
 
+function find_claims_for_attestation($user_id, $att_id) {
+    $query  = "SELECT ass.assertion_id, ass.proved_at, c.name, c.config, c.claim_id, app.approved_by, u.display_name AS ra, app.approved_at, app.approved_with, ass.evidence, ass.source, ct.handler ";
+    $query .= "FROM assertions ass ";
+    $query .= "LEFT JOIN claims c ON ass.claim_id=c.claim_id ";
+    $query .= "LEFT JOIN claim_types ct ON c.type_id=ct.type_id ";
+    $query .= "LEFT JOIN approvals app ON ass.assertion_id=app.assertion_id ";
+    $query .= "LEFT JOIN users u ON app.approved_by=u.user_id ";
+    $query .= "JOIN att2claims a2c ON a2c.claim_id=ass.claim_id ";
+    $query .= "JOIN attestations att ON att.attestation_id=a2c.attestation_id ";
+    $query .= "WHERE ass.user_id=$user_id AND att.attestation_id=$att_id ";
+    $query .= "AND app.approved_by IS NOT NULL";
+
+    db_select($query, $result);
+    if ($result) foreach ($result as &$a) {
+        $a['card'] = $a['handler']::get_card($a['evidence'], $a['config']);
+    }
+    return $result;
+}
 
 function find_unapproved_assertions($search) {
     $query  = "SELECT ass.assertion_id, c.name, c.type_id, c.config, ct.handler, ass.assertion_id, ass.evidence, ass.source, ass.proved_at, u.user_id, u.display_name ";
@@ -83,7 +101,7 @@ function find_approved_assertions($user_id, $search) {
 }
 
 function find_unlocked_attestations($user_id) {
-    $query  = "SELECT DISTINCT att.name ";
+    $query  = "SELECT DISTINCT att.name, att.attestation_id ";
     $query .= "FROM approvals app ";
     $query .= "JOIN assertions ass ON ass.assertion_id=app.assertion_id ";
     $query .= "JOIN att2claims a2c ON a2c.claim_id=ass.claim_id ";
@@ -93,23 +111,6 @@ function find_unlocked_attestations($user_id) {
     db_select($query, $result);
     return $result;
 }
-
-// function get_user($user_id) {
-//     $query  = "SELECT uid, display_name, ra ";
-//     $query .= "FROM users ";
-//     $query .= "WHERE user_id=$user_id";
-//     db_select($query, $result);
-//
-//     if (db_select($query, $result)) {
-//         $r['uid'] = $result[0]['uid'];
-//         $r['display_name'] = $result[0]['display_name'];
-//         $r['ra'] = $result[0]['ra'];
-//     } else {
-//         $r = [];
-//     }
-//
-//     return $r;
-// }
 
 function get_claim_for_user($user_id, $claim_id) {
     $query  = "SELECT c.name, ct.handler, c.config, ass.evidence, ass.assertion_id, ass.source, ass.proved_at, app.approved_by, u.uid, app.approved_at, app.approved_with ";
@@ -137,9 +138,10 @@ function get_claim_for_user($user_id, $claim_id) {
 }
 
 function get_claim_for_assertion($assertion_id) {
-    $query  = "SELECT ass.user_id, ass.evidence, ass.proved_at, app.approved_by, app.approved_at, app.approved_with, ass.source, c.name, c.claim_id, for_user.display_name AS for_user_name, by_user.display_name AS by_user_name ";
+    $query  = "SELECT ass.user_id, ass.evidence, ass.proved_at, app.approved_by, app.approved_at, app.approved_with, ass.source, c.name, c.claim_id, ct.handler, for_user.display_name AS for_user_name, by_user.display_name AS by_user_name ";
     $query .= "FROM assertions  ass ";
     $query .= "LEFT JOIN claims  c ON c.claim_id=ass.claim_id ";
+    $query .= "LEFT JOIN claim_types ct ON ct.type_id=c.type_id ";
     $query .= "LEFT JOIN approvals app ON app.assertion_id=ass.assertion_id ";
     $query .= "LEFT JOIN users for_user ON for_user.user_id=ass.user_id ";
     $query .= "LEFT JOIN users by_user ON by_user.user_id=app.approved_by ";
@@ -148,7 +150,8 @@ function get_claim_for_assertion($assertion_id) {
     $r = [];
     if (db_select($query, $result)) {
         $r['user_id'] = $result[0]['user_id'];
-        $r['evidence'] = json_decode($result[0]['evidence'], true);
+        $handler = $result[0]['handler'];
+        $r['evidence'] = $handler::get_evidence(json_decode($result[0]['evidence'], true));
         $r['source'] = $result[0]['source'];
         $r['approved_by'] = $result[0]['approved_by'];
         $r['approved_at'] = $result[0]['approved_at'];

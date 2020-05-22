@@ -10,7 +10,7 @@
         <a href="/">home</a>
     </div>
     <div style="float: left; position: absolute; bottom: 0px;">
-        <input type=text name=search value="{{ search  }}"> <input type=submit name=action value=search> <input type=submit name=action value=clear>
+        {% if not name is empty %}<input type=text name=search value="{{ search  }}"> <input type=submit name=action value=search> <input type=submit name=action value=clear>{% endif %}
     </div>
     <div style="float: right;">
         {% if name is empty %}<input type=submit name=action value=login>{% else %}{{ name }} <input type=submit name=action value=logout>{% endif %}

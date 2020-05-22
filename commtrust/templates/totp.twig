@@ -1,0 +1,18 @@
+{% extends 'index.twig' %}
+
+{% block content %}
+<h2>Register Token</h2>
+name: {{ name }}<br>
+<p><img src="{{ qrcode }}"></p>
+<img id="counter" src="counter.png" width=120 height=10></p>
+<p>checksum: <input type=text name=totp_check value={{ totp }}> <input type=submit name=totp_action value=submit></p>
+<script>
+window.setInterval("r();", 1000);
+var seconds = {{ time }};
+document.getElementById('counter').style.width = Math.round(200/30*seconds);
+function r() {
+  document.getElementById('counter').style.width = Math.round(200/30*--seconds);
+  if (seconds == 0) location.reload();
+}
+</script>
+{% endblock %}

@@ -19,7 +19,7 @@ Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deseru
 <h3>Unlocked Attestations</h3>
 {% for attestation in attestations %}
     <div class="attestation">
-    {{ attestation['name'] }}
+    <a href="attestation.php?aid={{ attestation['attestation_id'] }}">{{ attestation['name'] }}</a>
     </div>
 {% endfor %}
 </div>

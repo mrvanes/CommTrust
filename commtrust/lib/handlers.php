@@ -1,4 +1,5 @@
 <?php
+require_once '../lib/ga.php';
 
 class empty_handler {
     private $id = "EMPTY";
@@ -18,6 +19,10 @@ class empty_handler {
     function get_attributes() {
         return [ 'a' => 'empty' ];
 
+    }
+
+    function get_evidence($e) {
+        return $e;
     }
 
     function get_card($proof, $config) {
@@ -75,6 +80,10 @@ class saml_handler {
     function get_attributes() {
         return $this->attributes;
 
+    }
+
+    function get_evidence($e) {
+        return $e;
     }
 
     function get_card($proof, $config) {
@@ -141,6 +150,10 @@ class oidc_handler {
 
     }
 
+    function get_evidence($e) {
+        return $e;
+    }
+
     function get_card($proof, $config) {
         $c = json_decode($config, true);
         $p = json_decode($proof, true);
@@ -202,6 +215,10 @@ class self_handler {
 
     }
 
+    function get_evidence($e) {
+        return $e;
+    }
+
     function get_card($proof, $config) {
         $c = json_decode($config, true);
         $p = json_decode($proof, true);
@@ -224,7 +241,7 @@ class self_handler {
             header('Location: /self.php');
             exit;
         }
-        $this->attributes = restore('self:attributes', []);
+        $this->attributes = $self_attributes;
         $this->source = $this->id;
         $this->completed = true;
     }
@@ -234,6 +251,81 @@ class self_handler {
         $this->completed = false;
         remove('self:attributes', []);
         remove('self:inputs', []);
+        header('Location: ' . $return_url);
+        exit;
+    }
+
+    function is_completed() {
+        return $this->completed;
+
+    }
+}
+
+class totp_handler {
+    private $id = "TOTP";
+    private $config = [];
+    private $attributes = [];
+    private $completed = false;
+    private $source = "";
+    private $card = [];
+
+    function __construct($config) {
+        $c = json_decode($config, true);
+        $this->card = $c['card'];
+    }
+
+    function get_id() {
+        return $this->id;
+    }
+
+    function get_attributes() {
+        return $this->attributes;
+
+    }
+
+    function get_evidence($e) {
+        $ga = new PHPGangsta_GoogleAuthenticator();
+        if (isset($e['secret'])) {
+            $e['totp'] = [$ga->getCode(implode("; ", $e['secret']))];
+            $e['secret'] = ['*****'];
+        }
+        return $e;
+    }
+
+    function get_card($proof, $config) {
+        $c = json_decode($config, true);
+        $p = json_decode($proof, true);
+        $ga = new PHPGangsta_GoogleAuthenticator();
+        foreach($c['card'] as $a) {
+            if ($a == 'secret') {
+                $r['totp'] = $ga->getCode(implode("; ", $p[$a]));
+//                 $r['secret'] = implode("; ", $p[$a]);
+            } else  {
+                if (isset($p[$a])) $r[$a] = implode("; ", $p[$a]);
+            }
+        }
+        return $r;
+    }
+
+    function get_source() {
+        return $this->source;
+    }
+
+    function start() {
+        $totp_secret = restore('totp:secret', '');
+        if (!$totp_secret) {
+            header('Location: /totp.php');
+            exit;
+        }
+        $this->attributes = ['secret' => [$totp_secret]];
+        $this->source = $this->id;
+        $this->completed = true;
+    }
+
+    function clear($return_url) {
+        $this->attribtes = [];
+        $this->completed = false;
+        remove('totp:secret', '');
         header('Location: ' . $return_url);
         exit;
     }
@@ -268,6 +360,10 @@ class readid_handler {
     function get_attributes() {
         return $this->attributes;
 
+    }
+
+    function get_evidence($e) {
+        return $e;
     }
 
     function get_card($proof) {
@@ -340,13 +436,13 @@ class readid_handler {
         "gender": "MALE",
         "genderSource": "CHIP",
         "genderSourceName": "ReadID NFC",
-        "issuingCountry": "ESP",
+        "issuingCountry": "US",
         "issuingCountrySource": "CHIP",
         "issuingCountrySourceName": "ReadID NFC",
-        "nameOfHolder": "GOMEZ BACHILLER, SERGIO",
+        "nameOfHolder": "JOHN DOE",
         "nameOfHolderSource": "CHIP",
         "nameOfHolderSourceName": "ReadID NFC",
-        "nationality": "ESP",
+        "nationality": "US",
         "nationalitySource": "CHIP",
         "nationalitySourceName": "ReadID NFC",
         "personalNumber": "00000000X",
@@ -355,10 +451,10 @@ class readid_handler {
         "placeOfBirth": null,
         "placeOfBirthSource": null,
         "placeOfBirthSourceName": null,
-        "primaryIdentifier": "GOMEZ BACHILLER",
+        "primaryIdentifier": "DOE",
         "primaryIdentifierSource": "CHIP",
         "primaryIdentifierSourceName": "ReadID NFC",
-        "secondaryIdentifier": "SERGIO",
+        "secondaryIdentifier": "JOHN",
         "secondaryIdentifierSource": "CHIP",
         "secondaryIdentifierSourceName": "ReadID NFC",
         "selfieVerificationProfile": null,
@@ -374,7 +470,7 @@ class readid_handler {
         "visualVerificationSourceName": null
     },
     "creationDate": "2020-03-18T07:59:27.111Z",
-    "customerApplicationReference": "SUBMITTER-DEMO-SERGIO",
+    "customerApplicationReference": "SUBMITTER-DEMO-JOHN",
     "deviceId": "0000000000000000",
     "deviceInfo": {
         "brand": "Xiaomi",
@@ -397,9 +493,9 @@ class readid_handler {
         {
             "colorSpace": "UNSPECIFIED",
             "height": 378,
-            "image": "https://ready.readid.com/odata/v1/Streams/1d4ab816-f8b0-466d-8403-77f7692f7142/faceImage/0",
+            "image": "https://ready.readid.com/odata/v1/Streams/1d4ab816-*****/faceImage/0",
             "mimeType": "image/jp2",
-            "original": "https://ready.readid.com/odata/v1/Streams/1d4ab816-f8b0-466d-8403-77f7692f7142/faceImage/0/original",
+            "original": "https://ready.readid.com/odata/v1/Streams/1d4ab816-******/faceImage/0/original",
             "originalImageBytes": null,
             "source": "UNSPECIFIED",
             "width": 307
@@ -408,21 +504,21 @@ class readid_handler {
         "fullDateOfBirth": "YYYY-MM-DDT00:00:00Z",
         "interpretedDateOfBirth": "DD.MM.YYYY",
         "interpretedDateOfExpiry": "DD.MM.YYYY",
-        "interpretedIssuingCountry": "Spain",
+        "interpretedIssuingCountry": "United States",
         "issuingAuthority": null,
-        "issuingCountry": "ESP",
+        "issuingCountry": "US",
         "ldsVersion": "1.7",
-        "nameOfHolder": "GOMEZ BACHILLER, SERGIO",
+        "nameOfHolder": "DOE, JOHN",
         "personalNumber": "00000000X",
-        "primaryIdentifier": "GOMEZ BACHILLER",
-        "secondaryIdentifier": "SERGIO",
+        "primaryIdentifier": "DOE",
+        "secondaryIdentifier": "JOHN",
         "signatureImages": [
         {
             "colorSpace": null,
             "height": 0,
-            "image": "https://ready.readid.com/odata/v1/Streams/1d4ab816-f8b0-466d-8403-77f7692f7142/signatureImage/0",
+            "image": "https://ready.readid.com/odata/v1/Streams/1d4ab816-******/signatureImage/0",
             "mimeType": "image/jpeg",
-            "original": "https://ready.readid.com/odata/v1/Streams/1d4ab816-f8b0-466d-8403-77f7692f7142/signatureImage/0/original",
+            "original": "https://ready.readid.com/odata/v1/Streams/1d4ab816-******/signatureImage/0/original",
             "source": null,
             "width": 0
         }
@@ -430,11 +526,11 @@ class readid_handler {
         "custodian": null,
         "documentCode": "ID",
         "gender": "MALE",
-        "interpretedNationality": "Spanish",
-        "mrzPrimaryIdentifier": "GOMEZ BACHILLER",
-        "mrzSecondaryIdentifier": "SERGIO",
+        "interpretedNationality": "American",
+        "mrzPrimaryIdentifier": "DOE",
+        "mrzSecondaryIdentifier": "JOHN",
         "MRZString": "****",
-        "nationality": "ESP",
+        "nationality": "US",
         "otherNames": [],
         "permanentAddress": ["Address", "City", "State/Province"],
         "placeOfBirth": "City, State",
@@ -460,7 +556,7 @@ class readid_handler {
     },
     "lib": {
         "coreVersion": "1.33.0",
-        "mobileCountryCode": "es",
+        "mobileCountryCode": "us",
         "mrtdConfiguration": {
         "AAEnabled": true,
         "allowedFids": [],
@@ -543,11 +639,11 @@ class readid_handler {
     },
     "opaqueId": null,
     "readySession": {
-        "opaqueId": "40170d6f-d68e-4496-af9a-7ef4ee386d03",
-        "readySessionId": "74ce5690-6b80-4486-8641-4129b1c314ac"
+        "opaqueId": "40170d6f-****",
+        "readySessionId": "74ce5690-****"
     },
     "serverVersion": "1.57.10",
-    "sessionId": "1d4ab816-f8b0-466d-8403-77f7692f7142",
+    "sessionId": "1d4ab816-****",
     "vizSession": {
         "backImage": {
         "height": 1280,
