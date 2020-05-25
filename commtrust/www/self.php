@@ -23,9 +23,8 @@ if ($self_action == 'submit') {
         $self_attributes[$input] = [$_POST[$input]];
     }
     restore('self:attributes', $self_attributes);
-    header('Location: /complete.php?action=start');
-    exit;
-
+    $link = "/complete.php?action=start";
+    header("Location: $link");
 }
 
 // Debug

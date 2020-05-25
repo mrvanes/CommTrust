@@ -19,14 +19,20 @@ $vars['name'] = $cn;
 $open_claims = find_open_claims($user_id);
 $completed_claims = find_completed_claims($user_id);
 $approved_claims = find_approved_claims($user_id);
-$attestations = find_unlocked_attestations($user_id);
+$unlocked = find_unlocked_attestations($user_id);
+$locked = find_locked_attestations($user_id);
+
+
+$vars['logs'] = read_logs($user_id, $last_seen);
 
 $vars['open'] = $open_claims;
 $vars['completed'] = $completed_claims;
 $vars['approved'] = $approved_claims;
-$vars['attestations'] = $attestations;
+$vars['unlocked'] = $unlocked;
+$vars['locked'] = $locked;
 $vars['url'] =  $_SERVER['PHP_SELF'];
 $vars['search'] =  $search;
+$vars['attclaims'] = get_claims_for_attestations();
 
 // Debug
 $vars['delays'] = print_r($Q_DELAY, true);

@@ -48,7 +48,7 @@ function db_select($query, &$result, $index = null) {
   return $rows;
 }
 
-function db_exec($query) {
+function db_exec($query, &$id = null) {
   global $db;
   global $Q_DELAY;
   global $Q_ERROR;
@@ -62,6 +62,9 @@ function db_exec($query) {
   }
   $T2 = getmicrotime();
   $Q_DELAY[$query] = $T2-$T1;
+
+  $insert_id = mysqli_insert_id($db);
+  if ($insert_id) $id = $insert_id;
 
   if (!$rows && $rows !== FALSE) $rows = TRUE;
   return $rows;

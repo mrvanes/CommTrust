@@ -16,3 +16,15 @@
         {% if name is empty %}<input type=submit name=action value=login>{% else %}{{ name }} <input type=submit name=action value=logout>{% endif %}
     </div>
 </div>
+{% if not logs is empty %}
+    <div class="container logs">
+        <div style="float: left;">
+        {% for log in logs %}
+            {{ log['message'] }}<br>
+        {% endfor %}
+        </div>
+        <div style="float: right;">
+            <input type=submit name=action value=catch-up>
+        </div>
+    </div>
+{% endif %}

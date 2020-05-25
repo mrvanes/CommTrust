@@ -6,7 +6,7 @@ function register_user($uid, $cn, $ra) {
     $query .= "ON DUPLICATE KEY UPDATE display_name='$cn'";
     db_exec($query);
 
-    $query  = "SELECT user_id, uid, display_name, ra FROM users ";
+    $query  = "SELECT user_id, uid, display_name, ra, last_seen FROM users ";
     $query .= "WHERE uid='$uid'";
     if ($ra) $query .= " AND ra=1";
     db_select($query, $user);
@@ -14,8 +14,14 @@ function register_user($uid, $cn, $ra) {
     return $user[0];
 }
 
-function get_user($user_id, $ra) {
-    $query  = "SELECT user_id, uid, display_name, ra FROM users ";
+function get_user($user_id, $ra, $set_last_seen=0) {
+    if ($set_last_seen) {
+        $query  = "UPDATE users ";
+        $query .= "SET last_seen=now() ";
+        $query .= "WHERE user_id=$user_id";
+        db_exec($query);
+    }
+    $query  = "SELECT user_id, uid, display_name, ra, last_seen FROM users ";
     $query .= "WHERE user_id=$user_id";
     if ($ra) $query .= " AND ra=1";
     db_select($query, $user);

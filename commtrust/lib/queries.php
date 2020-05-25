@@ -1,6 +1,29 @@
 <?php
 require_once('../lib/handlers.php');
 
+function add_log($actor_id, $subject_id, $ass_id, $msg) {
+    $query  = "INSERT INTO audit_log (actor_id, subject_id, assertion_id, message) ";
+    $query .= "VALUES ($actor_id, $subject_id, $ass_id, '$msg')";
+//     if ($subject_id) $query .= "$subject_id ";
+//     else $query .= "NULL, ";
+//     if ($ass_id) $query .= "$ass_id, ";
+//     else $query .= "NULL, ";
+//     $query .= "'$msg')";
+    db_exec($query);
+}
+
+function read_logs($user_id, $from) {
+    $query  = "SELECT al.timestamp, al.actor_id, al.subject_id, al.assertion_id, al.message, ua.display_name, us.display_name, c.name ";
+    $query .= "FROM audit_log al ";
+    $query .= "LEFT JOIN users ua ON al.actor_id=ua.user_id ";
+    $query .= "LEFT JOIN users us ON al.subject_id=us.user_id ";
+    $query .= "LEFT JOIN assertions ass ON ass.assertion_id=al.assertion_id ";
+    $query .= "LEFT JOIN claims c ON c.claim_id=ass.claim_id ";
+    $query .= "WHERE (actor_id=$user_id OR subject_id=$user_id) AND al.timestamp > '$from'";
+    $r = db_select($query, $result);
+    return $result;
+}
+
 function find_open_claims($user_id) {
     $query  = "SELECT c.claim_id, c.name, c.type_id, c.config ";
     $query .= "FROM claims c ";
@@ -64,6 +87,21 @@ function find_claims_for_attestation($user_id, $att_id) {
     return $result;
 }
 
+function get_claims_for_attestations() {
+    $query  = "SELECT att.attestation_id, c.claim_id, c.name ";
+    $query .= "FROM attestations att ";
+    $query .= "LEFT JOIN att2claims a2c ON a2c.attestation_id=att.attestation_id ";
+    $query .= "LEFT JOIN claims c ON c.claim_id=a2c.claim_id";
+
+    db_select($query, $result);
+
+    $atts = [];
+    foreach ($result as $row) {
+        $atts[$row['attestation_id']][$row['claim_id']] = $row['name'];
+    }
+    return $atts;
+}
+
 function find_unapproved_assertions($search) {
     $query  = "SELECT ass.assertion_id, c.name, c.type_id, c.config, ct.handler, ass.assertion_id, ass.evidence, ass.source, ass.proved_at, u.user_id, u.display_name ";
     $query .= "FROM assertions ass ";
@@ -112,6 +150,22 @@ function find_unlocked_attestations($user_id) {
     return $result;
 }
 
+function find_locked_attestations($user_id) {
+    $query  = "SELECT att.name, att.attestation_id ";
+    $query .= "FROM attestations att ";
+    $query .= "WHERE att.attestation_id NOT IN(";
+    $query .= "SELECT DISTINCT att.attestation_id ";
+    $query .= "FROM approvals app ";
+    $query .= "JOIN assertions ass ON ass.assertion_id=app.assertion_id ";
+    $query .= "JOIN att2claims a2c ON a2c.claim_id=ass.claim_id ";
+    $query .= "JOIN attestations att ON att.attestation_id=a2c.attestation_id ";
+    $query .= "WHERE ass.user_id=$user_id";
+    $query .= ")";
+
+    db_select($query, $result);
+    return $result;
+}
+
 function get_claim_for_user($user_id, $claim_id) {
     $query  = "SELECT c.name, ct.handler, c.config, ass.evidence, ass.assertion_id, ass.source, ass.proved_at, app.approved_by, u.uid, app.approved_at, app.approved_with ";
     $query .= "FROM claims c ";
@@ -151,7 +205,7 @@ function get_claim_for_assertion($assertion_id) {
     if (db_select($query, $result)) {
         $r['user_id'] = $result[0]['user_id'];
         $handler = $result[0]['handler'];
-        $r['evidence'] = $handler::get_evidence(json_decode($result[0]['evidence'], true));
+        $r['evidence'] = $handler::render_evidence(json_decode($result[0]['evidence'], true));
         $r['source'] = $result[0]['source'];
         $r['approved_by'] = $result[0]['approved_by'];
         $r['approved_at'] = $result[0]['approved_at'];
@@ -179,18 +233,22 @@ function get_attestations_for_claim($claim_id) {
 function complete_evidence($user_id, $claim_id, $ass_id, $evidence, $source) {
     $query  = "SELECT ass.assertion_id ";
     $query .= "FROM assertions ass ";
-    $query .= "JOIN approvals app ON app.assertion_id=ass.assertion_id ";
-    $query .= "WHERE ass.user_id=$user_id AND ass.claim_id=$claim_id";
+    $query .= "LEFT JOIN approvals app ON app.assertion_id=ass.assertion_id ";
+    $query .= "WHERE ass.user_id=$user_id AND ass.claim_id=$claim_id ";
+    $query .= "AND app.approved_by IS NULL ";
+    $query .= "LIMIT 1";
     $r = db_select($query, $result);
-    if ($r and $r['assertion_id'] == $ass_id) {
+    if ($r && $result[0]['assertion_id'] == $ass_id) {
         $query  = "UPDATE assertions ";
         $query .= "SET evidence='$evidence', source='$source', proved_at=now() ";
         $query .= "WHERE assertion_id=$ass_id";
     } else {
         $query = "INSERT INTO assertions (user_id, claim_id, evidence, source, proved_at) ";
-        $query .= "VALUES ($user_id, $claim_id, '$evidence', '$source', now()) ";
+        $query .= "VALUES ($user_id, $claim_id, '$evidence', '$source', now())";
     }
-    db_exec($query);
+    db_exec($query, $id);
+    if ($id) $ass_id = $id;
+    add_log($user_id, 'NULL', $ass_id, "User $user_id completed evidence on assertion $ass_id from source $source");
 }
 
 function retract_evidence($aid) {
@@ -213,7 +271,8 @@ function approve_assertion($assertion_id, $user_id, $with) {
     db_exec($query);
     $query  = "INSERT INTO approvals (assertion_id, approved_by, approved_at, approved_with) ";
     $query .= "VALUES ($assertion_id, $user_id, now(), '$with')";
-    db_exec($query);
+    db_exec($query, $id);
+    add_log($user_id, $cuser, $assertion_id, "User $user_id approved assertion $assertion_id for user $cuser");
 }
 
 function disapprove_assertion($assertion_id) {

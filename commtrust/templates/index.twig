@@ -17,9 +17,28 @@ Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deseru
 
 <div class="container">
 <h3>Unlocked Attestations</h3>
-{% for attestation in attestations %}
+{% for attestation in unlocked %}
     <div class="attestation">
     <a href="attestation.php?aid={{ attestation['attestation_id'] }}">{{ attestation['name'] }}</a>
+    <div style="float: right;" class="claims">
+    {% for claim_id, claim in attclaims[attestation['attestation_id']] %}
+    <a href="/complete.php?cid={{ claim_id }}">{{ claim }}</a><br>
+    {% endfor %}
+    </div>
+    </div>
+{% endfor %}
+</div>
+
+<div class="container">
+<h3>Locked Attestations</h3>
+{% for attestation in locked %}
+    <div class="attestation open">
+    <a href="attestation.php?aid={{ attestation['attestation_id'] }}">{{ attestation['name'] }}</a>
+    <div style="float: right;" class="claims">
+    {% for claim_id, claim in attclaims[attestation['attestation_id']] %}
+    <a href="/complete.php?cid={{ claim_id }}">{{ claim }}</a><br>
+    {% endfor %}
+    </div>
     </div>
 {% endfor %}
 </div>
@@ -64,6 +83,7 @@ on {{ claim['approved_at'] }}
 {% endfor %}
 </div>
 
+{% if 0 %}
 <div class="container">
 <h3>Open Claims</h3>
 {% for claim in open %}
@@ -72,6 +92,8 @@ on {{ claim['approved_at'] }}
 </div>
 {% endfor %}
 </div>
+
+{% endif %}
 
 {% endif %}
 

@@ -30,6 +30,8 @@ if (!$user) {
 $approved_assertions = find_approved_assertions($user_id, $search);
 $unapproved_assertions = find_unapproved_assertions($search);
 
+$vars['logs'] = read_logs($user_id, $last_seen);
+
 $vars['approved'] = $approved_assertions;
 $vars['unapproved'] = $unapproved_assertions;
 $vars['ra'] = $cn;

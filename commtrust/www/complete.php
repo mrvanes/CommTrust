@@ -44,7 +44,7 @@ $vars = [
 ];
 
 $vars['aid'] = $ass_id;
-$vars['evidence'] =  $handler::get_evidence(json_decode($evidence, true));
+$vars['evidence'] =  $handler::render_evidence(json_decode($evidence, true));
 $vars['source'] = $source;
 $vars['proved_at'] = $proved_at;
 $vars['url'] = $_SERVER['PHP_SELF'];

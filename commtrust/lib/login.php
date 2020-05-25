@@ -12,21 +12,27 @@ if ($action=='login') {
     $cn = $a['cn'][0];
     $user = register_user($uid, $cn, $ra);
     $user_id = restore('user_id', $user['user_id']);
+    $user = get_user($user_id, $ra, 0);
 } else {
     $user_id = restore('user_id', 0);
+    $user = get_user($user_id, $ra, 0);
 }
 
 // $user = get_user($uid, $ra);
-$user = get_user($user_id, $ra);
+// $user = get_user($user_id, $ra);
 $cn = $user['display_name'];
 $uid = $user['uid'];
+$last_seen = $user['last_seen'];
 
 if ($action=='logout') {
     $user_id = remove('user_id', 0);
-    $cn = remove('cn', '');
     $user = Null;
     $uid = Null;
     $asp->logout(['ReturnTo' => $_SERVER['PHP_SELF']]);
 }
 
+if ($action=='catch-up') {
+    $user = get_user($user_id, $ra, 1);
+    $last_seen = $user['last_seen'];
+}
 

@@ -21,7 +21,7 @@ class empty_handler {
 
     }
 
-    function get_evidence($e) {
+    function render_evidence($e) {
         return $e;
     }
 
@@ -82,7 +82,7 @@ class saml_handler {
 
     }
 
-    function get_evidence($e) {
+    function render_evidence($e) {
         return $e;
     }
 
@@ -150,7 +150,7 @@ class oidc_handler {
 
     }
 
-    function get_evidence($e) {
+    function render_evidence($e) {
         return $e;
     }
 
@@ -215,7 +215,7 @@ class self_handler {
 
     }
 
-    function get_evidence($e) {
+    function render_evidence($e) {
         return $e;
     }
 
@@ -283,7 +283,7 @@ class totp_handler {
 
     }
 
-    function get_evidence($e) {
+    function render_evidence($e) {
         $ga = new PHPGangsta_GoogleAuthenticator();
         if (isset($e['secret'])) {
             $e['totp'] = [$ga->getCode(implode("; ", $e['secret']))];
@@ -362,7 +362,7 @@ class readid_handler {
 
     }
 
-    function get_evidence($e) {
+    function render_evidence($e) {
         return $e;
     }
 
@@ -389,7 +389,8 @@ class readid_handler {
     }
 
     function clear($return_url) {
-
+        header('Location: ' . $return_url);
+        exit;
     }
 
     function is_completed() {
