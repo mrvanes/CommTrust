@@ -7,18 +7,19 @@
 {% block content %}
 <div class="container">
 <h2>Applicant vetting</h2>
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+Fulfil  all the listed attestations to complete the identity vetting process. Select
+a claim that will support your attestation and follow the steps indicated to complete it.
+Completed claims are notified to your RA and once verified will be approved. Once all
+claims necessary for the attestation are approved the attestation is fulfilled. Repeat
+for all attestations. <b>Click an attestation to begin</b>.
 </div>
 
 {% if name is not empty %}
 
 <div class="container">
-<h3>Unlocked Attestations</h3>
-{% for attestation in unlocked %}
-    <div class="attestation">
+<h3>Undeclared Attestations</h3>
+{% for attestation in locked %}
+    <div class="attestation open">
     <a href="attestation.php?aid={{ attestation['attestation_id'] }}">{{ attestation['name'] }}</a>
     <div style="float: right;" class="claims">
     {% for claim_id, claim in attclaims[attestation['attestation_id']] %}
@@ -29,17 +30,24 @@ Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deseru
 {% endfor %}
 </div>
 
+
 <div class="container">
-<h3>Locked Attestations</h3>
-{% for attestation in locked %}
-    <div class="attestation open">
-    <a href="attestation.php?aid={{ attestation['attestation_id'] }}">{{ attestation['name'] }}</a>
-    <div style="float: right;" class="claims">
-    {% for claim_id, claim in attclaims[attestation['attestation_id']] %}
-    <a href="/complete.php?cid={{ claim_id }}">{{ claim }}</a><br>
-    {% endfor %}
-    </div>
-    </div>
+<h3>Presented Claims</h3>
+{% for claim in completed %}
+<div class="idcard completed">
+<a href="/complete.php?cid={{ claim['claim_id'] }}">{{ claim['name'] }}</a><br>
+<div class="evidence">
+proved at {{ claim['proved_at'] }}<br>
+via {{ claim['source'] }}
+{% if claim['ra'] %}<br>
+approved by {{ claim['ra'] }}<br>
+on {{ claim['approved_at'] }}
+{% endif %}<br>
+{% for k,v in claim['card'] %}
+{{ k }}: {{ v }}<br>
+{% endfor %}
+</div>
+</div>
 {% endfor %}
 </div>
 
@@ -64,22 +72,16 @@ on {{ claim['approved_at'] }}
 </div>
 
 <div class="container">
-<h3>Completed Claims</h3>
-{% for claim in completed %}
-<div class="idcard completed">
-<a href="/complete.php?cid={{ claim['claim_id'] }}">{{ claim['name'] }}</a><br>
-<div class="evidence">
-proved at {{ claim['proved_at'] }}<br>
-via {{ claim['source'] }}
-{% if claim['ra'] %}<br>
-approved by {{ claim['ra'] }}<br>
-on {{ claim['approved_at'] }}
-{% endif %}<br>
-{% for k,v in claim['card'] %}
-{{ k }}: {{ v }}<br>
-{% endfor %}
-</div>
-</div>
+<h3>Received Attestations</h3>
+{% for attestation in unlocked %}
+    <div class="attestation">
+    <a href="attestation.php?aid={{ attestation['attestation_id'] }}">{{ attestation['name'] }}</a>
+    <div style="float: right;" class="claims">
+    {% for claim_id, claim in attclaims[attestation['attestation_id']] %}
+    <a href="/complete.php?cid={{ claim_id }}">{{ claim }}</a><br>
+    {% endfor %}
+    </div>
+    </div>
 {% endfor %}
 </div>
 

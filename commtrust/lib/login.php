@@ -16,11 +16,11 @@ if ($action=='login') {
 } else {
     $user_id = restore('user_id', 0);
     $user = get_user($user_id, $ra, 0);
+    $cn = $user['display_name'];
 }
 
 // $user = get_user($uid, $ra);
 // $user = get_user($user_id, $ra);
-$cn = $user['display_name'];
 $uid = $user['uid'];
 $last_seen = $user['last_seen'];
 
