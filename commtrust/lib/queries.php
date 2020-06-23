@@ -248,7 +248,18 @@ function complete_evidence($user_id, $claim_id, $ass_id, $evidence, $source) {
     }
     db_exec($query, $id);
     if ($id) $ass_id = $id;
-    add_log($user_id, 'NULL', $ass_id, "User $user_id completed evidence on assertion $ass_id from source $source");
+
+    $user = get_user($user_id);
+    $assertion = get_assertion($ass_id);
+    add_log($user_id, 'NULL', $ass_id, "User " . $user['display_name'] . " completed evidence on assertion " . $assertion['name'] . " from source $source");
+}
+
+function get_assertion($aid) {
+    $query  = "SELECT c.name ";
+    $query .= "FROM assertions a LEFT JOIN claims c ON a.claim_id = c.claim_id ";
+    $query .= "WHERE a.assertion_id=$aid";
+    db_select($query, $result);
+    return $result[0];
 }
 
 function retract_evidence($aid) {
@@ -272,7 +283,12 @@ function approve_assertion($assertion_id, $user_id, $with) {
     $query  = "INSERT INTO approvals (assertion_id, approved_by, approved_at, approved_with) ";
     $query .= "VALUES ($assertion_id, $user_id, now(), '$with')";
     db_exec($query, $id);
-    add_log($user_id, $cuser, $assertion_id, "User $user_id approved assertion $assertion_id for user $cuser");
+
+
+    $user = get_user($user_id);
+    $claim_user = get_user($cuser);
+    $assertion = get_assertion($assertion_id);
+    add_log($user_id, $cuser, $assertion_id, "User " . $user['display_name'] . " approved assertion " . $assertion['name'] . " for user " . $claim_user['display_name']);
 }
 
 function disapprove_assertion($assertion_id) {

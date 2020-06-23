@@ -122,51 +122,8 @@ class saml_handler {
 
 }
 
-class cripl_handler {
+class cripl_handler extends saml_handler {
     private $id = "CRIPL";
-    private $config = [];
-    private $attributes = [];
-    private $sp = "";
-    private $idp = "";
-    private $session = "";
-    private $source = "";
-    private $completed = false;
-    private $card = [];
-
-    function __construct($config) {
-        $c = json_decode($config, true);
-        $this->sp = $c['sp'];
-        $this->idp = $c['idp'];
-        $this->card = $c['card'];
-        $this->session = new \SimpleSAML\Auth\Simple($c['sp']);
-    }
-
-    function get_id() {
-        return $this->id;
-    }
-
-    function get_attributes() {
-        return $this->attributes;
-
-    }
-
-    function render_evidence($e) {
-        return $e;
-    }
-
-    function get_card($proof, $config) {
-        $c = json_decode($config, true);
-        $p = json_decode($proof, true);
-        foreach($c['card'] as $a) {
-            if (isset($p[$a])) $r[$a] = implode("; ", $p[$a]);
-        }
-        return $r;
-    }
-
-    function get_source() {
-        return $this->source;
-
-    }
 
     function start() {
         $this->session->requireAuth([
@@ -182,16 +139,6 @@ class cripl_handler {
         $this->attributes = $cripled;
         $this->source = $this->session->getAuthData('saml:sp:IdP');
         $this->completed = true;
-    }
-
-    function clear($return_url) {
-        if (!$return_url) $return_url = $_SERVER['PHP_SELF'];
-        $this->session->logout(['ReturnTo' => $return_url]);
-        \SimpleSAML\Session::getSessionFromRequest()->cleanup();
-    }
-
-    function is_completed() {
-        return $this->completed;
     }
 
 }

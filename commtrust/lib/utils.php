@@ -14,7 +14,7 @@ function register_user($uid, $cn, $ra) {
     return $user[0];
 }
 
-function get_user($user_id, $ra, $set_last_seen=0) {
+function get_user($user_id, $ra=0, $set_last_seen=0) {
     if ($set_last_seen) {
         $query  = "UPDATE users ";
         $query .= "SET last_seen=now() ";
