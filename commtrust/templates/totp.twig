@@ -6,7 +6,7 @@ name: {{ name }}<br>
 TOTP secret:<br>
 <p><img src="{{ qrcode }}"></p>
 <img id="counter" src="counter.png" width=120 height=10></p>
-<p>checksum: <input type=text name=totp_check value={{ totp }}> <input type=submit name=totp_action value=submit></p>
+<p>checksum: <input type=text name=totp_check {#value={{ totp }}#}> <input type=submit name=totp_action value=submit></p>
 <script>
 window.setInterval("r();", 1000);
 var seconds = {{ time }};

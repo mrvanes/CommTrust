@@ -1,6 +1,6 @@
 <?php
 $ra = true;
-$idp = "http://idp.commtrust.local/simplesaml/saml2/idp/metadata.php";
+$idp = "https://idp2.incubator.geant.org/saml2/idp/metadata.php";
 require_once('../simplesaml/lib/_autoload.php');
 require_once('../lib/db.php');
 require_once('../lib/utils.php');

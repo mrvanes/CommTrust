@@ -1,6 +1,6 @@
 <?php
-$db_user = 'admin';
-$db_password = 'admin';
+$db_user = 'commtrust';
+$db_password = 'A4FYNmKk';
 $db_schema = 'commtrust';
 $db_server = 'localhost';
 
