@@ -55,15 +55,15 @@ class empty_handler {
 }
 
 class saml_handler {
-    private $id = "SAML";
-    private $config = [];
-    private $attributes = [];
-    private $sp = "";
-    private $idp = "";
-    private $session = "";
-    private $source = "";
-    private $completed = false;
-    private $card = [];
+    protected $id = "SAML";
+    protected $config = [];
+    protected $attributes = [];
+    protected $sp = "";
+    protected $idp = "";
+    protected $session = "";
+    protected $source = "";
+    protected $completed = false;
+    protected $card = [];
 
     function __construct($config) {
         $c = json_decode($config, true);
@@ -122,8 +122,8 @@ class saml_handler {
 
 }
 
-class cripl_handler extends saml_handler {
-    private $id = "CRIPL";
+class saml_cripple_handler extends saml_handler {
+    protected $id = "SAML_CRIPPLE";
 
     function start() {
         $this->session->requireAuth([
@@ -145,15 +145,15 @@ class cripl_handler extends saml_handler {
 
 
 class oidc_handler {
-    private $id = "OIDC";
-    private $config = [];
-    private $attributes = [];
-    private $rp = "";
-    private $op = "";
-    private $session = "";
-    private $source = "";
-    private $completed = false;
-    private $card = [];
+    protected $id = "OIDC";
+    protected $config = [];
+    protected $attributes = [];
+    protected $rp = "";
+    protected $op = "";
+    protected $session = "";
+    protected $source = "";
+    protected $completed = false;
+    protected $card = [];
 
     function __construct($config) {
         $c = json_decode($config, true);
@@ -213,6 +213,110 @@ class oidc_handler {
 
 }
 
+class oidc_cripple_handler extends oidc_handler {
+    protected $id = "OIDC_CRIPPLE";
+
+    function start() {
+        echo "OP: " . print_r($this->op, true);
+        $this->session->requireAuth([
+            'openidconnect:op' => $this->op
+        ]);
+        \SimpleSAML\Session::getSessionFromRequest()->cleanup();
+        $attributes = $this->session->getAttributes();
+	foreach ($attributes as $attribute => $values) {
+            foreach($values as $value) {
+                $cripled[$attribute][] = substr($value, 0,3) . "*";
+            }
+	}
+        $this->attributes = $cripled;
+        $this->source = $this->op['client_id'];
+        $this->completed = true;
+    }
+
+}
+
+class orcid_handler {
+    protected $id = "ORCID";
+    protected $config = [];
+    protected $attributes = [];
+    protected $rp = "";
+    protected $session = "";
+    protected $source = "";
+    protected $completed = false;
+    protected $card = [];
+
+    function __construct($config) {
+        $c = json_decode($config, true);
+        $this->rp = $c['rp'];
+        $this->card = $c['card'];
+        $this->session = new \SimpleSAML\Auth\Simple($c['rp']);
+    }
+
+    function get_id() {
+        return $this->id;
+    }
+
+    function get_attributes() {
+        return $this->attributes;
+
+    }
+
+    function render_evidence($e) {
+        return $e;
+    }
+
+    function get_card($proof, $config) {
+        $c = json_decode($config, true);
+        $p = json_decode($proof, true);
+        foreach($c['card'] as $a) {
+            if (isset($p[$a])) $r[$a] = implode("; ", $p[$a]);
+        }
+        return $r;
+    }
+
+    function get_source() {
+        return $this->source;
+
+    }
+
+    function start() {
+        $this->session->requireAuth();
+        \SimpleSAML\Session::getSessionFromRequest()->cleanup();
+        $this->attributes = $this->session->getAttributes();
+        $this->source = $this->id;
+        $this->completed = true;
+    }
+
+    function clear($return_url) {
+        if (!$return_url) $return_url = $_SERVER['PHP_SELF'];
+        $this->session->logout(['ReturnTo' => $return_url]);
+        \SimpleSAML\Session::getSessionFromRequest()->cleanup();
+    }
+
+    function is_completed() {
+        return $this->completed;
+    }
+
+}
+
+class orcid_cripple_handler extends orcid_handler {
+    protected $id = "ORCID_CRIPPLE";
+
+    function start() {
+        $this->session->requireAuth();
+        \SimpleSAML\Session::getSessionFromRequest()->cleanup();
+        $attributes = $this->session->getAttributes();
+	foreach ($attributes as $attribute => $values) {
+            foreach($values as $value) {
+                $cripled[$attribute][] = substr($value, 0,3) . "*";
+            }
+	}
+        $this->attributes = $cripled;
+        $this->source = $this->id;
+        $this->completed = true;
+    }
+
+}
 class self_handler {
     private $id = "SELF";
     private $config = [];
