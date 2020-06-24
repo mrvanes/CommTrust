@@ -45,10 +45,11 @@ function find_completed_claims($user_id) {
     $query .= "AND app.approved_by IS NULL";
 
     db_select($query, $result);
-    if ($result) foreach ($result as &$a) {
-        $a['card'] = $a['handler']::get_card($a['evidence'], $a['config']);
+    if ($result) foreach ($result as $a => $c) {
+        $r[$c['claim_id']] = $c;
+        $r[$c['claim_id']]['card'] = $c['handler']::get_card($c['evidence'], $c['config']);
     }
-    return $result;
+    return $r;
 }
 
 function find_approved_claims($user_id) {
@@ -62,10 +63,11 @@ function find_approved_claims($user_id) {
     $query .= "AND app.approved_by IS NOT NULL";
 
     db_select($query, $result);
-    if ($result) foreach ($result as &$a) {
-        $a['card'] = $a['handler']::get_card($a['evidence'], $a['config']);
+    if ($result) foreach ($result as $c) {
+        $r[$c['claim_id']] = $c;
+        $r[$c['claim_id']]['card'] = $c['handler']::get_card($c['evidence'], $c['config']);
     }
-    return $result;
+    return $r;
 }
 
 function find_claims_for_attestation($user_id, $att_id) {
@@ -151,15 +153,14 @@ function find_unlocked_attestations($user_id) {
 }
 
 function find_locked_attestations($user_id) {
-    $query  = "SELECT att.name, att.attestation_id ";
+    $query  = "SELECT DISTINCT att.name, att.attestation_id ";
     $query .= "FROM attestations att ";
-    $query .= "WHERE att.attestation_id NOT IN(";
-    $query .= "SELECT DISTINCT att.attestation_id ";
-    $query .= "FROM approvals app ";
-    $query .= "JOIN assertions ass ON ass.assertion_id=app.assertion_id ";
-    $query .= "JOIN att2claims a2c ON a2c.claim_id=ass.claim_id ";
-    $query .= "JOIN attestations att ON att.attestation_id=a2c.attestation_id ";
-    $query .= "WHERE ass.user_id=$user_id";
+    $query .= "JOIN att2claims a2c ON att.attestation_id = a2c.attestation_id ";
+    $query .= "WHERE a2c.claim_id NOT IN ( ";
+    $query .= "  SELECT ass.claim_id ";
+    $query .= "  FROM assertions ass ";
+    $query .= "  JOIN approvals app ON app.assertion_id = ass.assertion_id ";
+    $query .= "  WHERE ass.user_id = $user_id";
     $query .= ")";
 
     db_select($query, $result);

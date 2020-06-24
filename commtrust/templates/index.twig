@@ -23,7 +23,7 @@ for all attestations. <b>Click an attestation to begin</b>.
     <a href="attestation.php?aid={{ attestation['attestation_id'] }}">{{ attestation['name'] }}</a>
     <div style="float: right;" class="claims">
     {% for claim_id, claim in attclaims[attestation['attestation_id']] %}
-    <a href="/complete.php?cid={{ claim_id }}">{{ claim }}</a><br>
+    {% if claim_id not in approved|keys %}<a href="/complete.php?cid={{ claim_id }}">{{ claim }}</a><br>{% endif %}
     {% endfor %}
     </div>
     </div>
@@ -53,9 +53,9 @@ on {{ claim['approved_at'] }}
 
 <div class="container">
 <h3>Approved Claims</h3>
-{% for claim in approved %}
+{% for claim_id, claim in approved %}
 <div class="idcard approved">
-<a href="/complete.php?cid={{ claim['claim_id'] }}">{{ claim['name'] }}</a><br>
+<a href="/complete.php?cid={{ claim_id }}">{{ claim['name'] }}</a><br>
 <div class="evidence">
 proved at {{ claim['proved_at'] }}<br>
 via {{ claim['source'] }}
@@ -78,7 +78,7 @@ on {{ claim['approved_at'] }}
     <a href="attestation.php?aid={{ attestation['attestation_id'] }}">{{ attestation['name'] }}</a>
     <div style="float: right;" class="claims">
     {% for claim_id, claim in attclaims[attestation['attestation_id']] %}
-    <a href="/complete.php?cid={{ claim_id }}">{{ claim }}</a><br>
+    {% if claim_id in approved|keys %}<a href="/complete.php?cid={{ claim_id }}">{{ claim }}</a><br>{% endif %}
     {% endfor %}
     </div>
     </div>
