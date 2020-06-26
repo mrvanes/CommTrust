@@ -41,7 +41,7 @@ foreach ($unlocked as $ul) {
 
 echo "<pre>\n";
 
-echo json_encode($json, JSON_PRETTY_PRINT);
+echo htmlentities(json_encode($json, JSON_PRETTY_PRINT));
 /*
 echo "<br><br>\n";
 
