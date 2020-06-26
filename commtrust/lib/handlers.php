@@ -244,6 +244,7 @@ class orcid_handler {
     protected $source = "";
     protected $completed = false;
     protected $card = [];
+    protected $url = "";
 
     function __construct($config) {
         $c = json_decode($config, true);
@@ -270,7 +271,9 @@ class orcid_handler {
         $p = json_decode($proof, true);
         foreach($c['card'] as $a) {
             if (isset($p[$a])) $r[$a] = implode("; ", $p[$a]);
-        }
+	}
+	$url = $p['url'][0];
+	$r['url'] = "<a href=\"$url\" target=_blank>$url</a>";
         return $r;
     }
 
@@ -282,7 +285,9 @@ class orcid_handler {
     function start() {
         $this->session->requireAuth();
         \SimpleSAML\Session::getSessionFromRequest()->cleanup();
-        $this->attributes = $this->session->getAttributes();
+        $attributes = $this->session->getAttributes();
+        $this->attributes = $attributes;
+	$this->attributes['url'] = $attributes['orcid.uri'];
         $this->source = $this->id;
         $this->completed = true;
     }
@@ -312,6 +317,7 @@ class orcid_cripple_handler extends orcid_handler {
             }
 	}
         $this->attributes = $cripled;
+	$this->attributes['url'] = $attributes['orcid.uri'];
         $this->source = $this->id;
         $this->completed = true;
     }

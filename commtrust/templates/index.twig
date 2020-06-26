@@ -43,7 +43,7 @@ approved by {{ claim['ra'] }}<br>
 on {{ claim['approved_at'] }}
 {% endif %}<br>
 {% for k,v in claim['card'] %}
-{{ k }}: {{ v }}<br>
+{{ k }}: {{ v|raw }}<br>
 {% endfor %}
 </div>
 </div>
@@ -63,7 +63,7 @@ approved by {{ claim['ra'] }}<br>
 on {{ claim['approved_at'] }}
 {% endif %}<br>
 {% for k,v in claim['card'] %}
-{{ k }}: {{ v }}<br>
+{{ k }}: {{ v|raw }}<br>
 {% endfor %}
 </div>
 </div>
