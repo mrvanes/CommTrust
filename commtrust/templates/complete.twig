@@ -23,7 +23,7 @@ Unlocks the following Attestations:<br><br>
     {% endif %}
     <table>
     {% for k, vs in evidence %}
-    <tr valign=top><td><b>{{ k }}</b></td><td>{% for v in vs %}{% if not v is iterable %}{{ v }}{% endif %}<br>{% endfor %}</td></tr>
+    <tr valign=top><td><b>{{ k }}</b></td><td>{% for v in vs %}{% if not v is iterable %}{{ v|raw }}{% endif %}<br>{% endfor %}</td></tr>
     {% endfor %}
     </table>
 {% else %}

@@ -89,6 +89,7 @@ class saml_handler {
     function get_card($proof, $config) {
         $c = json_decode($config, true);
         $p = json_decode($proof, true);
+	$r = [];
         foreach($c['card'] as $a) {
             if (isset($p[$a])) $r[$a] = implode("; ", $p[$a]);
         }
@@ -179,6 +180,7 @@ class oidc_handler {
     function get_card($proof, $config) {
         $c = json_decode($config, true);
         $p = json_decode($proof, true);
+	$r = [];
         foreach($c['card'] as $a) {
             if (isset($p[$a])) $r[$a] = implode("; ", $p[$a]);
         }
@@ -269,11 +271,10 @@ class orcid_handler {
     function get_card($proof, $config) {
         $c = json_decode($config, true);
         $p = json_decode($proof, true);
+	$r = [];
         foreach($c['card'] as $a) {
             if (isset($p[$a])) $r[$a] = implode("; ", $p[$a]);
 	}
-	$url = $p['url'][0];
-	$r['url'] = "<a href=\"$url\" target=_blank>$url</a>";
         return $r;
     }
 
@@ -287,7 +288,8 @@ class orcid_handler {
         \SimpleSAML\Session::getSessionFromRequest()->cleanup();
         $attributes = $this->session->getAttributes();
         $this->attributes = $attributes;
-	$this->attributes['url'] = $attributes['orcid.uri'];
+	$url = $attributes['orcid.uri'][0];
+	$this->attributes['url'][0] = "<a href='$url' target=_blank>$url</a>";
         $this->source = $this->id;
         $this->completed = true;
     }
@@ -317,7 +319,9 @@ class orcid_cripple_handler extends orcid_handler {
             }
 	}
         $this->attributes = $cripled;
-	$this->attributes['url'] = $attributes['orcid.uri'];
+	$url = $attributes['orcid.uri'][0];
+	$this->attributes['url'][0] = "<a href=$url target=_blank>$url</a>";
+	#$this->attributes['url'][0] = "Test";
         $this->source = $this->id;
         $this->completed = true;
     }
@@ -354,6 +358,7 @@ class self_handler {
     function get_card($proof, $config) {
         $c = json_decode($config, true);
         $p = json_decode($proof, true);
+	$r = [];
         foreach($c['card'] as $a) {
             if (isset($p[$a])) $r[$a] = implode("; ", $p[$a]);
         }
@@ -427,6 +432,7 @@ class totp_handler {
     function get_card($proof, $config) {
         $c = json_decode($config, true);
         $p = json_decode($proof, true);
+	$r = [];
         $ga = new PHPGangsta_GoogleAuthenticator();
         foreach($c['card'] as $a) {
             if ($a == 'secret') {
@@ -500,6 +506,7 @@ class readid_handler {
 
     function get_card($proof) {
         $p = json_decode($proof, true);
+	$r = [];
         if (isset($p['deviceInfo']['brand'])) $r['brand'] = $p['deviceInfo']['brand'];
         if (isset($p['deviceInfo']['model'])) $r['model'] = $p['deviceInfo']['model'];
         if (isset($p['documentContent']['nameOfHolder'])) $r['holder'] = $p['documentContent']['nameOfHolder'];

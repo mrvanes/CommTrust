@@ -52,7 +52,7 @@ function restore($var, $default='') {
     return $r;
 }
 
-function remove($var, $default) {
+function remove($var, $default='') {
     unset($_GET[$var]);
     unset($_POST[$var]);
     unset($_SESSION[$var]);

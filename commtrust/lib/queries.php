@@ -170,7 +170,7 @@ function find_locked_attestations($user_id) {
 }
 
 function get_claim_for_user($user_id, $claim_id) {
-    $query  = "SELECT c.name, ct.handler, c.config, ass.evidence, ass.assertion_id, ass.source, ass.proved_at, app.approved_by, u.uid, app.approved_at, app.approved_with ";
+    $query  = "SELECT c.name, c.claim_id, ct.handler, c.config, ass.evidence, ass.assertion_id, ass.source, ass.proved_at, app.approved_by, u.uid, app.approved_at, app.approved_with ";
     $query .= "FROM claims c ";
     $query .= "LEFT JOIN assertions ass ON ass.claim_id=c.claim_id AND ass.user_id=$user_id ";
     $query .= "LEFT JOIN claim_types ct ON c.type_id=ct.type_id ";
