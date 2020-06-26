@@ -12,6 +12,7 @@ $loader = new \Twig\Loader\FilesystemLoader('../templates');
 $twig = new \Twig\Environment($loader);
 
 $cid = restore('cid', 0);
+$completed = restore('completed', false);
 
 $r = get_claim_for_user($user_id, $cid);
 $handler = $r['handler'];
@@ -29,10 +30,12 @@ if ($action=='retract') {
 }
 
 if ($action=='start') {
+    remove('completed');
     $claim->start();
     $evidence = json_encode($claim->get_attributes());
     $source = json_encode($claim->get_source());
     complete_evidence($user_id, $cid, $ass_id, $evidence, $source);
+    $completed = restore('completed', true);
     $claim->clear($_SERVER['PHP_SELF']);
 }
 
@@ -42,6 +45,11 @@ $vars = [
     'type' => $r['name'],
     'id' => $claim->get_id()
 ];
+
+if ($completed) {
+    $vars['completed'] = true;
+    remove('completed');
+}
 
 $vars['aid'] = $ass_id;
 $vars['evidence'] =  $handler::render_evidence(json_decode($evidence, true));

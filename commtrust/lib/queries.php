@@ -44,6 +44,7 @@ function find_completed_claims($user_id) {
     $query .= "WHERE ass.user_id=$user_id ";
     $query .= "AND app.approved_by IS NULL";
 
+    $r = [];
     db_select($query, $result);
     if ($result) foreach ($result as $a => $c) {
         $r[$c['claim_id']] = $c;
@@ -62,6 +63,7 @@ function find_approved_claims($user_id) {
     $query .= "WHERE ass.user_id=$user_id ";
     $query .= "AND app.approved_by IS NOT NULL";
 
+    $r = [];
     db_select($query, $result);
     if ($result) foreach ($result as $c) {
         $r[$c['claim_id']] = $c;

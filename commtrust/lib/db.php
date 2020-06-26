@@ -70,6 +70,28 @@ function db_exec($query, &$id = null) {
   return $rows;
 }
 
+function db_multi_exec($query, &$id = null) {
+  global $db;
+  global $Q_DELAY;
+  global $Q_ERROR;
+
+  $rows = FALSE;
+
+  $T1 = getmicrotime();
+  if (mysqli_multi_query($db, $query)) $rows = mysqli_affected_rows($db);
+  if ($rows === FALSE) {
+    $Q_ERROR[$query]=mysqli_error($db);
+  }
+  $T2 = getmicrotime();
+  $Q_DELAY[$query] = $T2-$T1;
+
+  $insert_id = mysqli_insert_id($db);
+  if ($insert_id) $id = $insert_id;
+
+  if (!$rows && $rows !== FALSE) $rows = TRUE;
+  return $rows;
+}
+
 
 function getmicrotime() {
   list ($usec, $sec) = explode(" ", microtime());

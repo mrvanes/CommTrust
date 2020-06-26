@@ -123,7 +123,7 @@ class saml_handler {
 }
 
 class saml_cripple_handler extends saml_handler {
-    protected $id = "SAML_CRIPPLE";
+    protected $id = "SAML_***";
 
     function start() {
         $this->session->requireAuth([
@@ -214,7 +214,7 @@ class oidc_handler {
 }
 
 class oidc_cripple_handler extends oidc_handler {
-    protected $id = "OIDC_CRIPPLE";
+    protected $id = "OIDC_***";
 
     function start() {
         echo "OP: " . print_r($this->op, true);
@@ -300,7 +300,7 @@ class orcid_handler {
 }
 
 class orcid_cripple_handler extends orcid_handler {
-    protected $id = "ORCID_CRIPPLE";
+    protected $id = "ORCID_***";
 
     function start() {
         $this->session->requireAuth();

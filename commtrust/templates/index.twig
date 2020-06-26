@@ -5,6 +5,7 @@
 {% endif %}
 
 {% block content %}
+{% if name is not empty %}
 <div class="container">
 <h2>Applicant vetting</h2>
 Fulfil  all the listed attestations to complete the identity vetting process. Select
@@ -13,8 +14,6 @@ Completed claims are notified to your RA and once verified will be approved. Onc
 claims necessary for the attestation are approved the attestation is fulfilled. Repeat
 for all attestations. <b>Click an attestation to begin</b>.
 </div>
-
-{% if name is not empty %}
 
 <div class="container">
 <h3>Undeclared Attestations</h3>

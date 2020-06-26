@@ -18,13 +18,16 @@ Unlocks the following Attestations:<br><br>
         {% if claim['approved_with']['in_person'] %} with in_person<br>{% endif %}
     {% endif %}
     <p><input type=submit name=action value=retract> <input type=submit name=action value=start> evidence</p>
+    {% if completed %}
+    <p>Click <a href="/">home</a> to return.</p>
+    {% endif %}
     <table>
     {% for k, vs in evidence %}
     <tr valign=top><td><b>{{ k }}</b></td><td>{% for v in vs %}{% if not v is iterable %}{{ v }}{% endif %}<br>{% endfor %}</td></tr>
     {% endfor %}
     </table>
 {% else %}
-    {% if start %}
+    {% if completed %}
         <p>Attestation completed</p>
     {% else %}
         <p><input type=submit name=action value=start> claim</p>

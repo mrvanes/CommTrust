@@ -15,7 +15,7 @@
         <p><input type=submit name=action value=disapprove> claim</p>
     {% else %}
         <p><input type=checkbox name=with[in_person] value=1> in person</p>
-        <p><input type=submit name=action value=approve> assertion</p>
+        <p><input type=submit name=action value=approve> claim</p>
     {% endif %}
     <table>
     {% for k, vs in claim['evidence'] %}

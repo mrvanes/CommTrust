@@ -1,7 +1,11 @@
 <?php
+$ra = false;
+$idp = "https://idp1.incubator.geant.org/saml2/idp/metadata.php";
+require_once('../simplesaml/lib/_autoload.php');
 require_once('../lib/db.php');
 require_once('../lib/utils.php');
 require_once('../lib/queries.php');
+require_once('../lib/login.php');
 
 $user_id = $_GET['id'];
 
@@ -53,5 +57,6 @@ echo "<br><br>\n";
 
 echo json_encode($approved, JSON_PRETTY_PRINT);
 echo "<br><br>\n";
-*/
+ */
+
 echo "</pre>\n";

@@ -1,5 +1,14 @@
 <?php
 
+function clear_db() {
+    $query  = "TRUNCATE TABLE `audit_log`;";
+    $query .= "TRUNCATE TABLE `approvals`;";
+    $query .= "SET FOREIGN_KEY_CHECKS = 0;";
+    $query .= "TRUNCATE TABLE `assertions`;";
+    $query .= "SET FOREIGN_KEY_CHECKS = 1;";
+    db_multi_exec($query);
+}
+
 function register_user($uid, $cn, $ra) {
     $query  = "INSERT INTO users (uid, display_name) ";
     $query .= "VALUES ('$uid', '$cn') ";

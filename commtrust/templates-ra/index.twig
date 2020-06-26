@@ -7,10 +7,10 @@
 {% block content %}
 <div class="container">
 <h2>RA vetting</h2>
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-Excepteur sint occaecat cuaidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+Start by clicking the name of one of the Unapproved Claims (yellow boxes), tick if the
+applicant is present in person, and click "approve" to confirm the claim (not "assertion"!).
+To disapprove, click on the title of one of the green claims that you approved
+(Claims Approved by ...) and click on"disapprove". 
 </div>
 
 <div class="container">
@@ -18,7 +18,7 @@ Excepteur sint occaecat cuaidatat non proident, sunt in culpa qui officia deseru
 {% for assertion in unapproved %}
 <div class="idcard completed">
 <a href="/approve.php?aid={{ assertion['assertion_id'] }}">{{ assertion['name'] }}</a><br>
-for {{ assertion['display_name'] }}<br>
+for <a href="?search={{ assertion['display_name'] }}">{{ assertion['display_name'] }}</a><br>
 <div class="evidence">
 proved on: {{ assertion['proved_at'] }}<br>
 via {{ assertion['source'] }}<br>
@@ -35,7 +35,7 @@ via {{ assertion['source'] }}<br>
 {% for assertion in approved %}
 <div class="idcard approved">
 <a href="/approve.php?aid={{ assertion['assertion_id'] }}">{{ assertion['name'] }}</a><br>
-for {{ assertion['display_name'] }}<br>
+for <a href="?search={{ assertion['display_name'] }}">{{ assertion['display_name'] }}</a><br>
 <div class="evidence">
 proved on {{ assertion['proved_at'] }}<br>
 via {{ assertion['source'] }}<br>
